@@ -1,14 +1,10 @@
-import {About} from './components/pages/About';
-import {Form} from './components/pages/Form';
-import {DynamicRoute} from './components/pages/DynamicRoute';
+import Home from './components/pages/Home';
 
-export const routes = [{
-    path: '/about/',
-    component: About
-}, {
-    path: '/form/',
-    component: Form
-}, {
-    path: '/dynamic-route/blog/:blogId/post/:postId/',
-    component: DynamicRoute
-}];
+// Pages
+export default [
+    // Index page
+    {
+      path: '/',
+      component: Home,
+    },
+];
