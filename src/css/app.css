@@ -1,0 +1,18 @@
+/* Your app styles here */
+* {
+    --f7-subnavbar-height: 120px;
+}
+
+i.icon.status-icon {
+    vertical-align: bottom;
+}
+
+.messages-block {
+    height: calc(100vh - calc(var(--f7-subnavbar-height)));
+    margin-top: calc(var(--f7-subnavbar-height));
+}
+
+.list-request, .list-request ul{
+    height: 100%;
+    width: 100%;
+}

@@ -1,177 +1,88 @@
 import React from 'react';
-import {connect} from "react-redux";
 import {
-  List,
-  ListItem,
-  Block,
-  Card,
-  AccordionContent, Icon, Page,
+    List,
+    ListItem,
+    SwipeoutActions,
+    SwipeoutButton,
+    Fab,
+    Icon,
 } from 'framework7-react';
-import Response from "./components/response";
-import RequestListItem from "./components/requestItem";
-import {initApplication} from "./HomePage";
 
-const Legend = () => (
-  <div className="legend row">
-    <div className="col"><Icon className={"status-icon"} material="check_circle" color="green"/> - В наличии</div>
-    <div className="col"><Icon className={"status-icon"} material="copyright" color="blue"/> - Оригинал</div>
-    <div className="col"><Icon className={"status-icon"} material="event" color="orange"/> - Резерв</div>
-  </div>
-);
+export default class extends React.Component {
 
+    forward() {
+        const app = this.$f7;
+        app.dialog.alert('Forward');
+    }
 
-const RequestsPage = (props) => {
-  const {
-    requests,
-    statuses,
-    answers,
-    f7,
-    ...parentProps
-  } = props;
-  const colorsMap = ['orange', 'blue', 'pink', 'green', 'red']
+    reply() {
+        const app = this.$f7;
+        app.dialog.alert('Reply');
+    }
 
-  const handleRefreshData = async (e) => {
-    f7.dialog.preloader('Пожалуйста подождите...');
-    const initApp = new initApplication();
-    await initApp.init(parentProps);
-    f7.dialog.close();
-    e.detail();
-  }
-
-  return (
-    <Page ptr onPtrRefresh={handleRefreshData}>
-      <Card
-        content="Здесь находятся ваши заявки, заказы и уже сделанные покупки"
-      />
-      <List accordionList inset>
-        <ListItem
-          className={`list-item-request`}
-          accordionItem
-          title="Общие запросы"
-          after={requests.filter(x => x.shop_id === null).length || '0'}
-        >
-          <AccordionContent>
-            <List
-              mediaList
-              className="with-border"
-            >
-              <ul>
-              {
-                requests.filter(x => x.shop_id === null).length === 0
-                  ? <Block>-</Block>
-                  : requests.filter(x => x.shop_id === null).map(item => (
-                    <RequestListItem
-                      key={item.id}
-                      item={item}
-                      f7={f7}
-                    />
-                  ))
-              }
-              </ul>
-            </List>
-          </AccordionContent>
-        </ListItem>
-        <ListItem
-          className={`list-item-request`}
-          accordionItem
-          title="Личный чат"
-          after={answers.filter(x => x.reserve_date === null).length || '0'}
-        >
-          <AccordionContent>
-            <List
-              mediaList
-              className="with-border"
-            >
-              <Legend />
-              <ul>
-              {answers.filter(x => x.reserve_date === null).map(item =>
-                <Response
-                  key={item.id}
-                  item={item}
-                  f7={f7}
-                />
-              )}
-              </ul>
-            </List>
-          </AccordionContent>
-        </ListItem>
-        <ListItem
-          className={`list-item-request`}
-          accordionItem
-          title="Резерв"
-          after={answers.filter(x => x.reserve_date !== null).length || '0'}
-        >
-          <AccordionContent>
-            <List
-              mediaList
-              className="with-border"
-            >
-              <Legend />
-              <ul>
-                {answers.filter(x => x.reserve_date !== null).map(item =>
-                  <Response
-                    key={item.id}
-                    item={item}
-                    f7={f7}
-                  />
-                )}
-              </ul>
-            </List>
-          </AccordionContent>
-        </ListItem>
-        <ListItem
-          className={`list-item-request`}
-          accordionItem
-          title="Мои заявки"
-          after={requests.filter(x => x.shop_id === null).length || '0'}
-        >
-          <AccordionContent>
-            <List accordionList inset>
-              {statuses.map((status, index) => (
-                <ListItem
-                  className={`list-item-request bg-${colorsMap[index]}`}
-                  key={`status_${status.id}`}
-                  accordionItem
-                  title={status.status}
-                  after={requests.filter(x => x.status_id === status.id).length || '0'}
+    render() {
+        return (
+            <div>
+                <List
+                    mediaList
+                    className={"no-margin"}
                 >
-                  <AccordionContent>
-                    <List
-                      mediaList
-                      className="with-border"
+                    <ListItem
+                        swipeout
+                        link="requests/1/"
+                        after="17:14 08.03.2018"
+                        subtitle="Предложений: 10"
+                        text="Необходимо подобрать тормозные колодки на автомобиль такой-то марки такого-то года выпуска."
                     >
-                      <ul>
-                        {
-                          requests.filter(x => x.status_id === status.id).length === 0
-                            ? <Block>-</Block>
-                            : requests.filter(x => x.status_id === status.id).map(item => (
-                              <RequestListItem
-                                key={item.id}
-                                item={item}
-                                f7={f7}
-                              />
-                            ))
-                        }
-                      </ul>
-                    </List>
-                  </AccordionContent>
-                </ListItem>
-              ))}
-            </List>
-          </AccordionContent>
-        </ListItem>
-      </List>
-    </Page>
-  );
-}
-
-
-const mapStateToProps = ({requests, statuses, answers}) => {
-  return {
-    requests,
-    statuses,
-    answers,
-  }
+                        <span slot="title">
+                            <Icon className={"status-icon"} material="access_time" color="blue"/> Колодки
+                        </span>
+                        <SwipeoutActions left>
+                            <SwipeoutButton color="blue" onClick={this.forward.bind(this)}>
+                                <Icon material="edit"/> Редактировать
+                            </SwipeoutButton>
+                        </SwipeoutActions>
+                        <SwipeoutActions right>
+                            <SwipeoutButton
+                                color="orange"
+                                onClick={this.reply.bind(this)}
+                                confirmText="Подтвердите отмену вашей заявки"
+                            >
+                               <Icon material="delete"/> Отменить заявку
+                            </SwipeoutButton>
+                        </SwipeoutActions>
+                    </ListItem>
+                    <ListItem
+                        swipeout
+                        link="requests/2/"
+                        after="17:14 08.03.2018"
+                        subtitle="Предложений: 7"
+                        text="Требуется комплект запчастей для прохождения ТО-3 на автомобиле таком-то такого-то года выпуска. Пробег 40 000 км."
+                    >
+                        <span slot="title">
+                            <Icon className={"status-icon"} material="new_releases" color="orange"/> TO-3
+                        </span>
+                        <SwipeoutActions left>
+                            <SwipeoutButton color="blue" onClick={this.forward.bind(this)}>
+                                <Icon material="edit"/> Редактировать
+                            </SwipeoutButton>
+                        </SwipeoutActions>
+                        <SwipeoutActions right>
+                            <SwipeoutButton
+                                color="orange"
+                                onClick={this.reply.bind(this)}
+                                confirmText="Подтвердите отмену вашей заявки"
+                            >
+                                <Icon material="delete"/> Отменить заявку
+                            </SwipeoutButton>
+                        </SwipeoutActions>
+                    </ListItem>
+                </List>
+                <Fab position="right-bottom" slot="fixed" color="blue">
+                    <Icon ios="f7:add" md="material:add"/>
+                    <Icon ios="f7:close" md="material:close"/>
+                </Fab>
+            </div>
+        );
+    }
 };
-
-export default connect(mapStateToProps, null)(RequestsPage)

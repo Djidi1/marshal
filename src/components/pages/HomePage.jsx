@@ -2,68 +2,64 @@ import React from 'react';
 import {
     Page,
     Navbar,
-    NavLeft,
-    NavTitle,
     NavRight,
+    // NavLeft,
+    NavTitle,
     Link,
     Toolbar,
     Block,
-    BlockTitle,
-    List,
-    ListItem,
-    Row,
-    Col,
-    Button
+    Tabs,
+    Tab
 } from 'framework7-react';
 
+import RequestsPage from './RequestsPage';
+
 export default () => (
-  <Page>
-    <Navbar>
-      <NavLeft>
-        <Link iconIos="f7:menu" iconMd="material:menu" panelOpen="left"></Link>
-      </NavLeft>
-      <NavTitle>My App</NavTitle>
-      <NavRight>
-        <Link iconIos="f7:menu" iconMd="material:menu" panelOpen="right"></Link>
-      </NavRight>
-    </Navbar>
-    <Toolbar bottom>
-      <Link>Left Link</Link>
-      <Link>Right Link</Link>
-    </Toolbar>
-    <Block strong>
-      <p>Here is your blank Framework7 app. Let's see what we have here.</p>
-    </Block>
-    <BlockTitle>Navigation</BlockTitle>
-    <List>
-      <ListItem link="/about/" title="About"></ListItem>
-      <ListItem link="/form/" title="Form"></ListItem>
-    </List>
-    <BlockTitle>Modals</BlockTitle>
-    <Block strong>
-      <Row>
-        <Col width="50">
-          <Button fill raised popupOpen="#popup">Popup</Button>
-        </Col>
-        <Col width="50">
-          <Button fill raised loginScreenOpen="#login-screen">Login Screen</Button>
-        </Col>
-      </Row>
-    </Block>
-    <BlockTitle>Panels</BlockTitle>
-    <Block strong>
-      <Row>
-        <Col width="50">
-          <Button fill raised panelOpen="left">Left Panel</Button>
-        </Col>
-        <Col width="50">
-          <Button fill raised panelOpen="right">Right Panel</Button>
-        </Col>
-      </Row>
-    </Block>
-    <List>
-      <ListItem link="/dynamic-route/blog/45/post/125/?foo=bar#about" title="Dynamic Route"></ListItem>
-      <ListItem link="/load-something-that-doesnt-exist/" title="Default Route (404)"></ListItem>
-    </List>
-  </Page>
+    <Page hideToolbarOnScroll pageContent={false}>
+        <Navbar
+            color="white"
+            textColor="white"
+            bgColor="red"
+        >
+            {/*<NavLeft backLink="Back"/>*/}
+            <NavTitle>Маршал</NavTitle>
+            <NavRight>
+                <Link iconMd="material:account_circle" loginScreenOpen="#login-screen"/>
+            </NavRight>
+        </Navbar>
+        <Toolbar
+            bottom
+            tabbar
+            labels
+        >
+            <Link tabLink="#requests" tabLinkActive text="Заявки" iconMd="material:important_devices"/>
+            <Link tabLink="#stores" text="Магазины" iconMd="material:store"/>
+            <Link tabLink="#cars" text="Автомобили" iconMd="material:directions_car"/>
+            <Link tabLink="#settings" text="Настройки" iconMd="material:settings"/>
+        </Toolbar>
+
+        <Tabs animated>
+            <Tab id="requests" className="page-content" tabActive>
+                <RequestsPage/>
+            </Tab>
+            <Tab id="stores" className="page-content">
+                <Block>
+                    <p>Tab 2 content</p>
+                    ...
+                </Block>
+            </Tab>
+            <Tab id="cars" className="page-content">
+                <Block>
+                    <p>Tab 3 content</p>
+                    ...
+                </Block>
+            </Tab>
+            <Tab id="settings" className="page-content">
+                <Block>
+                    <p>Tab 4 content</p>
+                    ...
+                </Block>
+            </Tab>
+        </Tabs>
+    </Page>
 );
