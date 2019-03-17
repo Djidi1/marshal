@@ -13,6 +13,8 @@ import {
 } from 'framework7-react';
 
 import RequestsPage from './RequestsPage';
+import StoresPage from './StoresPage';
+import CarsPage from './CarsPage';
 
 export default () => (
     <Page hideToolbarOnScroll pageContent={false}>
@@ -43,20 +45,14 @@ export default () => (
                 <RequestsPage/>
             </Tab>
             <Tab id="stores" className="page-content">
-                <Block>
-                    <p>Tab 2 content</p>
-                    ...
-                </Block>
+                <StoresPage/>
             </Tab>
             <Tab id="cars" className="page-content">
-                <Block>
-                    <p>Tab 3 content</p>
-                    ...
-                </Block>
+                <CarsPage/>
             </Tab>
             <Tab id="settings" className="page-content">
                 <Block>
-                    <p>Tab 4 content</p>
+                    <h1>Настройки</h1>
                     ...
                 </Block>
             </Tab>

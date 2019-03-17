@@ -3,6 +3,13 @@
     --f7-subnavbar-height: 120px;
 }
 
+.search-bar.subnavbar {
+    height: auto;
+}
+.stores-list .page-content {
+    padding-top: calc(var(--f7-navbar-height) + 52px) !important;
+}
+
 i.icon.status-icon {
     vertical-align: bottom;
 }
@@ -15,4 +22,8 @@ i.icon.status-icon {
 .list-request, .list-request ul{
     height: 100%;
     width: 100%;
+}
+
+h1 {
+    padding: 0 14px;
 }

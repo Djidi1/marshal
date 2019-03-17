@@ -5,9 +5,11 @@ import DynamicRoutePage from './components/pages/DynamicRoutePage';
 import NotFoundPage from './components/pages/NotFoundPage';
 import PanelLeftPage from './components/pages/PanelLeftPage';
 import PanelRightPage from './components/pages/PanelRightPage';
+import NewRequestPage from "./components/pages/NewRequestPage";
 import ResponsesPage from "./components/pages/ResponsesPage";
 import ResponsePage from "./components/pages/ResponsePage";
 import ChatPage from "./components/pages/ChatPage";
+import StoresList from "./components/pages/StoresList";
 
 export default [
     {
@@ -39,12 +41,20 @@ export default [
         component: DynamicRoutePage,
     },
     {
+        path: '/open_request/:reqId/',
+        component: NewRequestPage,
+    },
+    {
         path: '/requests/:reqId/',
         component: ResponsesPage,
     },
     {
         path: '/requests/response/:reqId/',
         component: ResponsePage,
+    },
+    {
+        path: '/stores_list/',
+        component: StoresList,
     },
     {
         path: '(.*)',
