@@ -2,60 +2,80 @@ import React from 'react';
 import {
     Page,
     Navbar,
-    NavRight,
-    // NavLeft,
-    NavTitle,
     Link,
     Toolbar,
-    Block,
     Tabs,
-    Tab
+    Tab,
+    Icon,
+    Fab
 } from 'framework7-react';
 
 import RequestsPage from './RequestsPage';
 import StoresPage from './StoresPage';
-import CarsPage from './CarsPage';
+import SettingsPage from './SettingsPage';
+import STOPage from './STOPage';
 
-export default () => (
-    <Page hideToolbarOnScroll pageContent={false}>
-        <Navbar
-            color="white"
-            textColor="white"
-            bgColor="red"
-        >
-            {/*<NavLeft backLink="Back"/>*/}
-            <NavTitle>Маршал</NavTitle>
-            <NavRight>
-                <Link iconMd="material:account_circle" loginScreenOpen="#login-screen"/>
-            </NavRight>
-        </Navbar>
-        <Toolbar
-            bottom
-            tabbar
-            labels
-        >
-            <Link tabLink="#requests" tabLinkActive text="Заявки" iconMd="material:important_devices"/>
-            <Link tabLink="#stores" text="Магазины" iconMd="material:store"/>
-            <Link tabLink="#cars" text="Автомобили" iconMd="material:directions_car"/>
-            <Link tabLink="#settings" text="Настройки" iconMd="material:settings"/>
-        </Toolbar>
 
-        <Tabs animated>
-            <Tab id="requests" className="page-content" tabActive>
-                <RequestsPage/>
-            </Tab>
-            <Tab id="stores" className="page-content">
-                <StoresPage/>
-            </Tab>
-            <Tab id="cars" className="page-content">
-                <CarsPage/>
-            </Tab>
-            <Tab id="settings" className="page-content">
-                <Block>
-                    <h1>Настройки</h1>
-                    ...
-                </Block>
-            </Tab>
-        </Tabs>
-    </Page>
-);
+class HomePage extends React.Component {
+
+    new_request(reqId) {
+        const app = this.$f7;
+        app.views.main.router.navigate('open_request/' + reqId + '/');
+        return false;
+    }
+
+    render() {
+        return (
+            <Page hideToolbarOnScroll pageContent={false}>
+                <Navbar
+                    color="white"
+                    textColor="white"
+                    bgColor="main"
+                    title="Маршал Сервис"
+                />
+                <Toolbar
+                    bottom
+                    tabbar
+                    labels
+                    color="main"
+                >
+                    <Link tabLink="#requests" tabLinkActive text="Заявки" iconMd="material:important_devices"/>
+                    <Link tabLink="#stores" text="Магазины" iconMd="material:store"/>
+                    <Link tabLink="#new"
+                          onClick={() => this.new_request(0)} text=" "
+                    >
+                        <Icon material="add"/>
+                    </Link>
+                    <Link tabLink="#sto" text="СТО" iconMd="material:build"/>
+                    <Link tabLink="#person" text="Кабинет" iconMd="material:person"/>
+                </Toolbar>
+                <Fab
+                    href="open_request/0/"
+                    position="center-bottom"
+                    slot="fixed"
+                    color="blue"
+                    className={"btn-new-request"}
+                >
+                    <Icon ios="f7:add" md="material:add"/>
+                </Fab>
+
+                <Tabs animated>
+                    <Tab id="requests" className="page-content" tabActive>
+                        <RequestsPage/>
+                    </Tab>
+                    <Tab id="stores" className="page-content">
+                        <StoresPage/>
+                    </Tab>
+                    <Tab id="sto" className="page-content">
+                        <STOPage/>
+                    </Tab>
+                    <Tab id="person" className="page-content">
+                        <SettingsPage/>
+                    </Tab>
+                </Tabs>
+            </Page>
+        )
+    }
+};
+
+export default (HomePage)

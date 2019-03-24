@@ -1,14 +1,19 @@
 import React from 'react';
+import {connect} from "react-redux";
 import {
     List,
     ListItem,
     SwipeoutActions,
     SwipeoutButton,
-    Fab,
     Icon,
 } from 'framework7-react';
 
-export default class extends React.Component {
+class RequestsPage extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+        };
+    }
 
     edit_request(reqId) {
         const app = this.$f7;
@@ -21,6 +26,8 @@ export default class extends React.Component {
     }
 
     render() {
+        const {requests} = this.props;
+
         return (
             <div>
                 <h1>Заявки</h1>
@@ -28,66 +35,47 @@ export default class extends React.Component {
                     mediaList
                     className={"no-margin"}
                 >
-                    <ListItem
-                        swipeout
-                        link="requests/1/"
-                        after="17:14 08.03.2018"
-                        subtitle="Предложений: 10"
-                        text="Необходимо подобрать тормозные колодки на автомобиль такой-то марки такого-то года выпуска."
-                    >
-                        <span slot="title">
-                            <Icon className={"status-icon"} material="access_time" color="blue"/> Колодки
-                        </span>
-                        <SwipeoutActions left>
-                            <SwipeoutButton color="blue" onClick={() => this.edit_request(1)}>
-                                <Icon material="edit"/> Редактировать
-                            </SwipeoutButton>
-                        </SwipeoutActions>
-                        <SwipeoutActions right>
-                            <SwipeoutButton
-                                color="orange"
-                                onClick={this.reply.bind(this)}
-                                confirmText="Подтвердите отмену вашей заявки"
+                    {
+                        requests.map( item => {
+                            return <ListItem
+                                key={item.id}
+                                swipeout
+                                link={"requests/" + item.id + "/"}
+                                after={item.date.toLocaleString()}
+                                subtitle={"Предложений: " + item.answers + ""}
+                                text={item.text}
                             >
-                               <Icon material="delete"/> Отменить заявку
-                            </SwipeoutButton>
-                        </SwipeoutActions>
-                    </ListItem>
-                    <ListItem
-                        swipeout
-                        link="requests/2/"
-                        after="17:14 08.03.2018"
-                        subtitle="Предложений: 7"
-                        text="Требуется комплект запчастей для прохождения ТО-3 на автомобиле таком-то такого-то года выпуска. Пробег 40 000 км."
-                    >
-                        <span slot="title">
-                            <Icon className={"status-icon"} material="new_releases" color="orange"/> TO-3
-                        </span>
-                        <SwipeoutActions left>
-                            <SwipeoutButton color="blue" onClick={() => this.edit_request(2)}>
-                                <Icon material="edit"/> Редактировать
-                            </SwipeoutButton>
-                        </SwipeoutActions>
-                        <SwipeoutActions right>
-                            <SwipeoutButton
-                                color="orange"
-                                onClick={this.reply.bind(this)}
-                                confirmText="Подтвердите отмену вашей заявки"
-                            >
-                                <Icon material="delete"/> Отменить заявку
-                            </SwipeoutButton>
-                        </SwipeoutActions>
-                    </ListItem>
+                                <span slot="title">
+                                    <Icon className={"status-icon"} material={item.status} color="blue"/> {item.category}
+                                </span>
+                                <SwipeoutActions left>
+                                    <SwipeoutButton color="blue" onClick={() => this.edit_request(1)}>
+                                        <Icon material="edit"/> Редактировать
+                                    </SwipeoutButton>
+                                </SwipeoutActions>
+                                <SwipeoutActions right>
+                                    <SwipeoutButton
+                                        color="orange"
+                                        onClick={this.reply.bind(this)}
+                                        confirmText="Подтвердите отмену вашей заявки"
+                                    >
+                                        <Icon material="delete"/> Отменить заявку
+                                    </SwipeoutButton>
+                                </SwipeoutActions>
+                            </ListItem>
+                        })
+                    }
                 </List>
-                <Fab
-                    href="open_request/0/"
-                    position="right-bottom"
-                    slot="fixed"
-                    color="blue"
-                >
-                    <Icon ios="f7:add" md="material:add"/>
-                </Fab>
             </div>
         );
     }
 };
+
+
+const mapStateToProps = store => {
+    return {
+        requests: store.requests,
+    }
+}
+
+export default connect(mapStateToProps)(RequestsPage)
