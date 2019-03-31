@@ -1,4 +1,7 @@
 import React from 'react';
+import { get } from 'idb-keyval';
+import {connect} from "react-redux";
+
 import {
     Page,
     Navbar,
@@ -14,9 +17,28 @@ import RequestsPage from './RequestsPage';
 import StoresPage from './StoresPage';
 import SettingsPage from './SettingsPage';
 import STOPage from './STOPage';
+import {handleLogin} from "../../actions/UserActions";
+
+
+class initApplication {
+    init = async (props) => {
+        await get('user').then(value => {
+            if (value !== undefined) {
+                props.handleLogin(value);
+            }
+        });
+    }
+}
 
 
 class HomePage extends React.Component {
+
+    async componentDidMount() {
+        this.$f7.dialog.preloader('Загрузка...');
+        const initApp = new initApplication();
+        await initApp.init(this.props).then();
+        this.$f7.dialog.close();
+    }
 
     new_request(reqId) {
         const app = this.$f7;
@@ -76,6 +98,18 @@ class HomePage extends React.Component {
             </Page>
         )
     }
+}
+
+const mapStateToProps = store => {
+    return {
+        user: store.user,
+    }
 };
 
-export default (HomePage)
+const mapDispatchToProps = dispatch => {
+    return {
+        handleLogin: user => dispatch(handleLogin(user)),
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage)

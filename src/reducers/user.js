@@ -1,26 +1,22 @@
 import {
-    LOGIN_REQUEST,
     LOGIN_SUCCESS,
-    LOGIN_FAIL,
 } from '../actions/UserActions'
 
+import { set } from 'idb-keyval';
+
 const initialState = {
+    id: 0,
     name: '',
-    error: '',
-    isFetching: false,
+    email: '',
+    role_id: 0,
+    shop_id: null,
 };
 
 export function userReducer(state = initialState, action) {
     switch (action.type) {
-        case LOGIN_REQUEST:
-            return { ...state, isFetching: true, error: '' };
-
         case LOGIN_SUCCESS:
-            return { ...state, isFetching: false, name: action.payload };
-
-        case LOGIN_FAIL:
-            return { ...state, isFetching: false, error: action.payload.message };
-
+            set('user', action.payload).then();
+            return { ...action.payload };
         default:
             return state
     }
