@@ -1,10 +1,12 @@
 import React from 'react';
 import { get } from 'idb-keyval';
 import {connect} from "react-redux";
+import { Offline, Detector } from "react-detect-offline";
 
 import {
     Page,
     Navbar,
+    NavRight,
     Link,
     Toolbar,
     Tabs,
@@ -17,16 +19,29 @@ import RequestsPage from './RequestsPage';
 import StoresPage from './StoresPage';
 import SettingsPage from './SettingsPage';
 import STOPage from './STOPage';
+
+import {getData} from '../../axios/getData'
 import {handleLogin} from "../../actions/UserActions";
+import {handleCategories, handleShops} from "../../actions/DataActions";
 
-
+// Load data from indexedDB to Store
 class initApplication {
     init = async (props) => {
-        await get('user').then(value => {
-            if (value !== undefined) {
-                props.handleLogin(value);
-            }
-        });
+        // from idb
+        await get('user').then(value => value !== undefined && props.handleLogin(value));
+        await get('shops').then(value => value !== undefined && props.handleShops(value));
+        await get('categories').then(value => value !== undefined && props.handleCategories(value));
+
+        // from internet
+        let detect = new Detector();
+        if (detect.state.online) {
+            console.log(detect.state.online);
+            let get_data = new getData();
+            get_data.data('shops').then(value => value !== undefined && props.handleShops(value));
+            get_data.data('categories').then(value => value !== undefined && props.handleCategories(value));
+        } else {
+            console.log(detect.state);
+        }
     }
 }
 
@@ -54,7 +69,13 @@ class HomePage extends React.Component {
                     textColor="white"
                     bgColor="main"
                     title="Маршал Сервис"
-                />
+                >
+                    <NavRight>
+                        <Offline>
+                            <Link iconMd="material:signal_wifi_off" />
+                        </Offline>
+                    </NavRight>
+                </Navbar>
                 <Toolbar
                     bottom
                     tabbar
@@ -109,6 +130,8 @@ const mapStateToProps = store => {
 const mapDispatchToProps = dispatch => {
     return {
         handleLogin: user => dispatch(handleLogin(user)),
+        handleShops: shops => dispatch(handleShops(shops)),
+        handleCategories: categories => dispatch(handleCategories(categories)),
     }
 };
 

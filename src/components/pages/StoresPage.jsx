@@ -29,7 +29,7 @@ class StoresPage extends React.Component {
                             <ListItem
                                 key={item.id}
                                 swipeout
-                                after={item.updated_at.toLocaleString()}
+                                after={item.phone}
                                 subtitle={item.description}
                                 text={item.address}
                             >
@@ -48,13 +48,13 @@ class StoresPage extends React.Component {
             </div>
         );
     }
-};
+}
 
 const mapStateToProps = store => {
-    console.log(store)
+    console.log(store);
     return {
-        stores: store.stores,
+        stores: store.stores.shops,
     }
-}
+};
 
 export default connect(mapStateToProps)(StoresPage)

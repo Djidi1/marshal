@@ -1,6 +1,7 @@
 import { set } from 'idb-keyval';
 import { axios } from './init'
 
+
 export class getData {
     data = async (type) => {
         const url = '/' + type;
@@ -11,12 +12,9 @@ export class getData {
                 set(type, res.data).then();
                 return res.data;
             }
-            return undefined;
+            return false;
         } catch (error) {
-            if (error.response.status === 401) {
-                return 401
-            }
-            return undefined;
+            return error.response;
         }
     };
 }

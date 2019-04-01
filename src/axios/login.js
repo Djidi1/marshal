@@ -16,7 +16,9 @@ export class authorisation {
             if (value === undefined) {
                 try {
                     let response = await axios.post(url, payload);
-                    set('AUTH_TOKEN', response.data.access_token).then();
+                    let AUTH_TOKEN = response.data.access_token;
+                    axios.defaults.headers.common['Authorization'] = 'Bearer ' + AUTH_TOKEN;
+                    set('AUTH_TOKEN', AUTH_TOKEN).then();
                     res = await this.user_details();
 
                 } catch (error) {
