@@ -1,11 +1,11 @@
 self.__precacheManifest = [
   {
-    "revision": "0b3d4c7f9aadbccd0454",
+    "revision": "6160a6094cdc93bc8073",
     "url": "/marshal/static/css/main.5a3bb2ac.chunk.css"
   },
   {
-    "revision": "0b3d4c7f9aadbccd0454",
-    "url": "/marshal/static/js/main.65ef3fcf.chunk.js"
+    "revision": "6160a6094cdc93bc8073",
+    "url": "/marshal/static/js/main.01c54b05.chunk.js"
   },
   {
     "revision": "7dbec811f24905765142",
@@ -28,12 +28,12 @@ self.__precacheManifest = [
     "url": "/marshal/static/media/Framework7Icons-Regular.0a51e7bb.woff2"
   },
   {
-    "revision": "0cefb5cc6ff6df9509ed193cff79de7c",
-    "url": "/marshal/static/media/Framework7Icons-Regular.0cefb5cc.woff"
-  },
-  {
     "revision": "570eb83859dc23dd0eec423a49e147fe",
     "url": "/marshal/static/media/MaterialIcons-Regular.570eb838.woff2"
+  },
+  {
+    "revision": "0cefb5cc6ff6df9509ed193cff79de7c",
+    "url": "/marshal/static/media/Framework7Icons-Regular.0cefb5cc.woff"
   },
   {
     "revision": "012cf6a10129e2275d79d6adac7f3b02",
@@ -56,7 +56,7 @@ self.__precacheManifest = [
     "url": "/marshal/static/media/MaterialIcons-Regular.e79bfd88.eot"
   },
   {
-    "revision": "97e64367a73f8612169544e487e79e76",
+    "revision": "3d23a0aaaf502c94d11ebc8306022177",
     "url": "/marshal/index.html"
   }
 ];
