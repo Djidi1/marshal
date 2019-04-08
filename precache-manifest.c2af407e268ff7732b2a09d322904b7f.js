@@ -1,23 +1,23 @@
 self.__precacheManifest = [
   {
-    "revision": "8e81dfeaecd4f7ea56f5",
+    "revision": "999b0d58949cf017e0e4",
     "url": "/marshal/static/css/main.dacb90e9.chunk.css"
   },
   {
-    "revision": "8e81dfeaecd4f7ea56f5",
-    "url": "/marshal/static/js/main.c2a7dc51.chunk.js"
+    "revision": "999b0d58949cf017e0e4",
+    "url": "/marshal/static/js/main.3c52180c.chunk.js"
   },
   {
     "revision": "7dbec811f24905765142",
     "url": "/marshal/static/js/runtime~main.34f2803b.js"
   },
   {
-    "revision": "951e12616eb641e1c17e",
+    "revision": "42cb2f11e8fd1d2813c2",
     "url": "/marshal/static/css/2.dd06cacc.chunk.css"
   },
   {
-    "revision": "951e12616eb641e1c17e",
-    "url": "/marshal/static/js/2.2a0f7c0e.chunk.js"
+    "revision": "42cb2f11e8fd1d2813c2",
+    "url": "/marshal/static/js/2.6e02186d.chunk.js"
   },
   {
     "revision": "efdffb4a57443b99c56893e74c4cc622",
@@ -28,12 +28,12 @@ self.__precacheManifest = [
     "url": "/marshal/static/media/Framework7Icons-Regular.0a51e7bb.woff2"
   },
   {
-    "revision": "570eb83859dc23dd0eec423a49e147fe",
-    "url": "/marshal/static/media/MaterialIcons-Regular.570eb838.woff2"
-  },
-  {
     "revision": "0cefb5cc6ff6df9509ed193cff79de7c",
     "url": "/marshal/static/media/Framework7Icons-Regular.0cefb5cc.woff"
+  },
+  {
+    "revision": "570eb83859dc23dd0eec423a49e147fe",
+    "url": "/marshal/static/media/MaterialIcons-Regular.570eb838.woff2"
   },
   {
     "revision": "012cf6a10129e2275d79d6adac7f3b02",
@@ -56,7 +56,7 @@ self.__precacheManifest = [
     "url": "/marshal/static/media/MaterialIcons-Regular.e79bfd88.eot"
   },
   {
-    "revision": "940d1a9840bd4924499669061b3a97b2",
+    "revision": "07a6fb44e42b12a95d4a18db401bd7ad",
     "url": "/marshal/index.html"
   }
 ];
