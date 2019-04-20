@@ -16,7 +16,7 @@ import {
     ListItem,
     Navbar,
     Subnavbar,
-    NavRight
+    // NavRight
 } from 'framework7-react';
 import {Detector} from "react-detect-offline";
 import {getData} from "../../axios/getData";
@@ -24,30 +24,36 @@ import {setData} from "../../axios/setData";
 import {get} from "idb-keyval";
 import {handleResponse} from "../../actions/DataActions";
 
-const getMessages = async (props, answer_id, loading) => {
-    let detect = new Detector();
-    loading.show('yellow');
-    if (await detect.state.online) {
-        let get_data = new getData();
-        await get_data.data('answer/' + answer_id).then(value => value !== undefined && props.handleResponse(value));
-    }else{
-        await get('answer/' + answer_id).then(value => value !== undefined && props.handleResponse(value));
+const _ = require('lodash/core');
+
+const getMessages = async (props, answer_id, loading, sendingData) => {
+    if (!sendingData) {
+        let detect = new Detector();
+        loading.show('yellow');
+        if (await detect.state.online) {
+            let get_data = new getData();
+            await get_data.data('answer/' + answer_id).then(value => value !== undefined && props.handleResponse(value));
+        } else {
+            await get('answer/' + answer_id).then(value => value !== undefined && props.handleResponse(value));
+        }
+        setTimeout(() => {
+            loading.hide();
+        }, 500);
     }
-    setTimeout(() => {
-        loading.hide();
-    }, 500);
 };
 
-const sendMessage = async (props, payload, notificationOffline) => {
+const sendMessage = async (props, payload, notificationOffline, handleSendingData) => {
+    handleSendingData(true);
     let detect = new Detector();
     if (await detect.state.online) {
         let set_data = new setData();
-        payload.forEach(data => {
-            set_data.data('message-add', data);
+        await payload.forEach( async data => {
+            await set_data.data('message-add', data);
         });
     }else{
         notificationOffline.open();
     }
+    handleSendingData(false);
 };
 
 class respMessages extends React.Component {
@@ -59,6 +65,7 @@ class respMessages extends React.Component {
             attachments: [],
             sheetVisible: false,
             typingMessage: null,
+            messages: this.props.response.messages,
             messagesData: [
                 {
                     type: 'received',
@@ -68,6 +75,7 @@ class respMessages extends React.Component {
             ],
             images: [],
             responseInProgress: false,
+            sendingData: false,
         }
     }
 
@@ -95,9 +103,6 @@ class respMessages extends React.Component {
                     title="Предложение"
                     backLink="Back"
                 >
-                    <NavRight>
-                        <Link iconMd="material:chat" href={"/messages/"}/>
-                    </NavRight>
                     <Subnavbar
                         inner={false}
                         className={"no-padding"}
@@ -216,8 +221,10 @@ class respMessages extends React.Component {
     }
     updateMessages() {
         const self = this;
+        const messages = self.props.response.messages;
+        console.log('update', messages);
         if (self.props.response.messages.length) {
-            const messagesData = self.props.response.messages.map((item) => {
+            const messagesData = messages.map((item) => {
                 return {
                     name: item.user.name,
                     type: item.user_id === 1 ? 'sent' : 'received',
@@ -225,12 +232,26 @@ class respMessages extends React.Component {
                     date: item.updated_at,
                 }
             });
-            self.setState({messagesData: messagesData});
+            self.setState({messages: messages, messagesData: messagesData});
         }
     }
-    componentWillReceiveProps() {
-        this.updateMessages();
+
+    // Обновляем сообщения, только если что-то изменилось
+    componentDidUpdate() {
+        const oldData = this.state.messages;
+        const newData = this.props.response.messages;
+        if (!(_.isEqual(newData, oldData))) {
+            this.updateMessages();
+        }
     }
+
+    static getDerivedStateFromProps(nextProps, prevState){
+        if (!(_.isEqual(nextProps.response.messages, prevState.messages))) {
+            return {response : nextProps.response};
+        }
+        else return null;
+    }
+
     componentDidMount() {
         const self = this;
         this.updateMessages();
@@ -239,7 +260,9 @@ class respMessages extends React.Component {
             self.messages = self.messagesComponent.f7Messages;
         });
 
-        this.intervalId = setInterval(()  => getMessages(self.props, self.answer_id, self.loading), 5000);
+        this.intervalId = setInterval(()  =>
+            getMessages(self.props, self.answer_id, self.loading, self.state.sendingData),
+            5000);
     }
     componentWillUnmount(){
         clearInterval(this.intervalId);
@@ -330,7 +353,7 @@ class respMessages extends React.Component {
             messagesData: [...self.state.messagesData, ...messagesToSend],
         });
 
-        sendMessage(this.props, messagesToSend, this.notificationOffline).then(() => {
+        sendMessage(this.props, messagesToSend, this.notificationOffline, this.handleSendingData).then(() => {
             self.messagebar.clear();
         });
 
@@ -344,7 +367,13 @@ class respMessages extends React.Component {
                 });
                 */
     }
+
+    handleSendingData = (value) => {
+        this.setState({sendingData: value});
+    }
 }
+
+
 
 const mapStateToProps = store => {
     return {
