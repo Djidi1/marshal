@@ -227,7 +227,7 @@ class respMessages extends React.Component {
             const messagesData = messages.map((item) => {
                 return {
                     name: item.user.name,
-                    type: item.user_id === 1 ? 'sent' : 'received',
+                    type: item.user_id === self.props.user.id ? 'sent' : 'received',
                     message: item.message,
                     date: item.updated_at,
                 }
