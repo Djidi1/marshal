@@ -38,6 +38,9 @@ i.icon.status-icon {
 .messages-title, .message {
     margin-bottom: var(--f7-message-margin);
 }
+.messages {
+    min-height: auto !important;
+}
 
 .list-request, .list-request ul{
     height: 100%;
