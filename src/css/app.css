@@ -76,3 +76,17 @@ h1 {
 .btn-new-request{
     bottom: 8px !important;
 }
+
+span.cat-icon svg {
+    flex: 1 1;
+    filter: invert(0%) sepia(100%) saturate(2000%) hue-rotate(0deg) brightness(100%) contrast(100%);
+    width: 40px;
+    margin-right: 8px;
+}
+span.cat-icon {
+    flex: 1;
+}
+span.categories-list {
+    display: flex;
+    align-items: center;
+}

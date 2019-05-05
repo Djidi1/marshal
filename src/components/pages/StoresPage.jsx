@@ -8,6 +8,8 @@ import {
     Icon,
     AccordionContent,
     BlockTitle,
+    Row,
+    Col,
 } from 'framework7-react';
 import {setData} from "../../axios/setData";
 import {getData} from "../../axios/getData";
@@ -47,8 +49,10 @@ class StoresPage extends React.Component {
                             .map((cat, index) =>
                             <ListItem
                                 key={index}
-                                accordionItem
-                                title={cat.category}>
+                                accordionItem>
+                                <span slot="title" className={'categories-list'}>
+                                    <span className={'cat-icon'} dangerouslySetInnerHTML={{__html: cat.icon }} /> {cat.category}
+                                </span>
                                 <AccordionContent>
                                     <List
                                         mediaList
