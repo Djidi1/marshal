@@ -1,6 +1,7 @@
 /* Your app styles here */
 * {
-    --f7-subnavbar-height: 94px;
+    /*--f7-subnavbar-height: auto;*/
+    --f7-navbar-bg-color: #cb2128;
     --f7-color-red: #cb2128;
     --f7-color-red-rgb: 203, 33, 40;
     --f7-color-red-shade: #c32128;
@@ -8,7 +9,9 @@
     --f7-theme-color-bg-color: #cb2128;
     --f7-theme-color: #cb2128;
     --f7-bars-link-color: #ffffff;
+    --f7-navbar-text-color: #ffffff;
     --f7-message-footer-font-size: 10px;
+    --f7-toolbar-link-color: #cb2128;
 
 }
 
@@ -43,6 +46,27 @@ i.icon.status-icon {
     height: 100%;
     width: 100%;
 }
+.list-with-header {
+    padding-top: 54px;
+}
+.list-title.list {
+    position: fixed;
+    top: var(--f7-navbar-height);
+    display: block;
+    z-index: 100;
+    width: 100vw;
+}
+.list-title:before {
+    content: '';
+    position: absolute;
+    right: 0;
+    width: 100%;
+    top: 100%;
+    bottom: auto;
+    height: 8px;
+    pointer-events: none;
+    background: var(--f7-navbar-shadow-image);
+}
 
 h1 {
     padding: 0 14px;
@@ -51,4 +75,54 @@ h1 {
 
 .btn-new-request{
     bottom: 8px !important;
+}
+
+span.cat-icon svg {
+    flex: 1 1;
+    width: 40px;
+    margin-right: 8px;
+}
+span.cat-icon svg .fil0 {
+    fill: var(--f7-color-red);
+}
+span.cat-icon {
+    flex: 1;
+}
+span.categories-list {
+    display: flex;
+    align-items: center;
+}
+.messagebar-sheet {
+    padding-bottom: 60px;
+}
+.fileContainer p {
+    display: none;
+}
+.errorsContainer {
+    position: absolute;
+    background: white;
+    border-radius: 5px;
+    padding: 0 4px;
+    opacity: 0.95;
+    box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.05);
+}
+.fileContainer {
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+    border-radius: 0;
+}
+
+.fileUploader {
+    position: absolute;
+    bottom: 0;
+}
+.fileContainer button.chooseFileButton {
+    height: 50px;
+    margin: 0;
+    border-radius: 0;
+    background-color: var(--f7-color-red);
+}
+.fileContainer button.chooseFileButton:hover {
+    background-color: var(--f7-color-red-tint);
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import ImageUploader from 'react-images-upload';
 import {connect} from "react-redux";
 import {
     Page,
@@ -7,10 +8,10 @@ import {
     Messagebar,
     Link,
     Message,
-    /* MessagebarAttachment,
-     MessagebarAttachments,
-     MessagebarSheet,
-     MessagebarSheetImage,*/
+    MessagebarAttachment,
+    MessagebarAttachments,
+    MessagebarSheet,
+    MessagebarSheetImage,
     Icon,
     List,
     ListItem,
@@ -92,6 +93,13 @@ class respMessages extends React.Component {
 
     loading = this.$f7.progressbar;
 
+    onDrop(pictureFiles, pictureDataURLs) {
+        this.setState({
+            images: pictureDataURLs,
+            // images: this.state.images.concat(pictureDataURLs),
+        });
+    }
+
     render() {
         const {response} = this.props;
         return (
@@ -105,11 +113,10 @@ class respMessages extends React.Component {
                 >
                     <Subnavbar
                         inner={false}
-                        className={"no-padding"}
-                    >
+                        className={"no-margin"}>
                         <List
                             mediaList
-                            className={"no-margin list-request"}
+                            className={"no-margin list-title"}
                         >
                             <ListItem
                                 key={response.id}
@@ -135,22 +142,21 @@ class respMessages extends React.Component {
                     sheetVisible={this.state.sheetVisible}
                     change={() => {this.setState({sheetVisible: !this.state.sheetVisible})}}
                     value={this.state.messageValue}
-                    //onChange={this.handleMessage.bind(this)}
                     onInput={this.handleMessage.bind(this)}
                 >
-                    {/* <Link
+                    <Link
                         iconIos="f7:camera_fill"
                         iconMd="material:camera_alt"
                         slot="inner-start"
                         onClick={() => {this.setState({sheetVisible: !this.state.sheetVisible})}}
-                    />*/}
+                    />
                     <Link
                         iconIos="f7:arrow_up_fill"
                         iconMd="material:send"
                         slot="inner-end"
                         onClick={this.sendMessage.bind(this)}
                     />
-                    {/* <MessagebarAttachments>
+                    <MessagebarAttachments>
                         {this.state.attachments.map((image, index) => (
                             <MessagebarAttachment
                                 key={index}
@@ -168,17 +174,32 @@ class respMessages extends React.Component {
                                 onChange={this.handleAttachment.bind(this)}
                             />
                         ))}
-                    </MessagebarSheet>*/}
+                        <>
+                            <ImageUploader
+                                slot="inner-start"
+                                withIcon={false}
+                                onChange={this.onDrop.bind(this)}
+                                imgExtension={['.jpg', '.jpeg', '.gif', '.png', '.gif']}
+                                maxFileSize={5242880}
+                                buttonText={'Добавить фото'}
+                                onClick={() => {this.setState({sheetVisible: true})}}
+                            />
+                        </>
+                    </MessagebarSheet>
                 </Messagebar>
 
-                <Messages ref={(el) => {this.messagesComponent = el}}>
+                <Messages
+                    className={"list-with-header"}
+                    ref={(el) => {this.messagesComponent = el}}
+                    scrollMessages={false}
+                >
                     {/*<MessagesTitle><b>Sunday, Feb 9,</b> 12:58</MessagesTitle>*/}
 
                     {this.state.messagesData.map((message, index) => (
                         <Message
                             key={index}
                             type={message.type}
-                            image={message.image}
+                            image={message.attachment}
                             name={message.name}
                             avatar={message.avatar}
                             footer={message.date.toLocaleString()}
@@ -189,6 +210,11 @@ class respMessages extends React.Component {
                             {message.message && (
                                 <span slot="text" dangerouslySetInnerHTML={{__html: message.message}} />
                             )}
+                            {/*{message.attachment && (
+                                <span slot="image">
+                                    <img src={message.attachment} className={'lazy'}/>
+                                </span>
+                            )}*/}
                         </Message>
                     ))}
                     {this.state.typingMessage && (
@@ -222,13 +248,13 @@ class respMessages extends React.Component {
     updateMessages() {
         const self = this;
         const messages = self.props.response.messages;
-        console.log('update', messages);
         if (self.props.response.messages.length) {
             const messagesData = messages.map((item) => {
                 return {
                     name: item.user.name,
                     type: item.user_id === self.props.user.id ? 'sent' : 'received',
                     message: item.message,
+                    attachment: item.attachment,
                     date: item.updated_at,
                 }
             });
@@ -324,12 +350,12 @@ class respMessages extends React.Component {
                 answer_id: self.answer_id,
                 user_id: self.user.id,
                 name: self.user.name,
-                message: "",
+                message: text.trim().length ? text : "&nbsp;",
                 attachment: attachment,
                 date: new Date(),
             });
         });
-        if (text.trim().length) {
+        if (text.trim().length && messagesToSend.length === 0) {
             messagesToSend.push({
                 answer_id: self.answer_id,
                 user_id: self.user.id,
