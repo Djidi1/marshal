@@ -13,6 +13,7 @@ import {
     Icon,
     ListItem,
     Block,
+    Subnavbar,
 } from 'framework7-react';
 
 const getResponse = async (props, resp_id) => {
@@ -56,42 +57,33 @@ class ResponsesPage extends Component {
                     title="Предложения"
                     backLink="Back"
                 >
-                </Navbar>
-                <List
-                    mediaList
-                    className={"no-margin list-title"}
-                >
-                    <ListItem
-                        swipeout
-                        after={request.created_at.toLocaleString()}
-                        subtitle={"Предложений: " + (request.answers.length || 0) + ""}
-                        text={request.text}
-                    >
+                    <Subnavbar
+                        inner={false}
+                        className={"no-margin"}>
+                        <List
+                            mediaList
+                            className={"no-margin list-title"}
+                        >
+                            <ListItem
+                                swipeout
+                                after={request.created_at.toLocaleString()}
+                                subtitle={"Предложений: " + (request.answers.length || 0) + ""}
+                                text={request.text}
+                            >
                                 <span slot="title">
                                     <Icon className={"status-icon"} material="access_time" color="blue"/>
                                     {this.get_category(request.category_id)}
                                 </span>
-                    </ListItem>
-                </List>
-
+                            </ListItem>
+                        </List>
+                    </Subnavbar>
+                </Navbar>
                 <List
                     mediaList
                     noHairlinesMd
+                    linksList
                     className={"list-with-header"}
                 >
-                    {/*
-created_at: "2019-04-09 00:00:00"
-description: "We have something "
-id: 1
-is_new: true
-price: 200
-request_id: 1
-shop_id: 7
-status_id: 1
-updated_at: "2019-04-09 00:00:00"
-updated_by: 1
-user_id: 1
-*/}
                     {
                         request.answers.length === 0
                             ?

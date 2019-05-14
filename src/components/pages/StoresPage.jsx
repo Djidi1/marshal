@@ -8,8 +8,6 @@ import {
     Icon,
     AccordionContent,
     BlockTitle,
-    Row,
-    Col,
 } from 'framework7-react';
 import {setData} from "../../axios/setData";
 import {getData} from "../../axios/getData";

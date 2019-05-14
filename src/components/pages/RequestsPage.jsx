@@ -88,15 +88,16 @@ class RequestsPage extends React.Component {
                                     after={item.created_at.toLocaleString()}
                                     subtitle={"Предложений: " + (item.answers_count) + ""}
                                     text={item.text}
-                                >
-                                <span slot="title">
-                                    <Icon
-                                        className={"status-icon"}
-                                        material={item.answers > 0 ? 'check_circle_outline' : 'access_time'}
-                                        color="blue"
-                                    />
-                                    {this.get_category(item.category_id)}
-                                </span>
+                                    className={'ripple'}
+                                    >
+                                    <span slot="title">
+                                        <Icon
+                                            className={"status-icon"}
+                                            material={item.answers > 0 ? 'check_circle_outline' : 'access_time'}
+                                            color="blue"
+                                        />
+                                        {this.get_category(item.category_id)}
+                                    </span>
                                     <SwipeoutActions left>
                                         <SwipeoutButton color="blue" onClick={() => this.edit_request(item.id)}>
                                             <Icon material="edit"/> Редактировать

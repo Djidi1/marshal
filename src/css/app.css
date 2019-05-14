@@ -47,7 +47,7 @@ i.icon.status-icon {
     width: 100%;
 }
 .list-with-header {
-    padding-top: 94px;
+    padding-top: 54px;
 }
 .list-title.list {
     position: fixed;
@@ -79,9 +79,11 @@ h1 {
 
 span.cat-icon svg {
     flex: 1 1;
-    filter: invert(0%) sepia(100%) saturate(2000%) hue-rotate(0deg) brightness(100%) contrast(100%);
     width: 40px;
     margin-right: 8px;
+}
+span.cat-icon svg .fil0 {
+    fill: var(--f7-color-red);
 }
 span.cat-icon {
     flex: 1;
@@ -89,4 +91,38 @@ span.cat-icon {
 span.categories-list {
     display: flex;
     align-items: center;
+}
+.messagebar-sheet {
+    padding-bottom: 60px;
+}
+.fileContainer p {
+    display: none;
+}
+.errorsContainer {
+    position: absolute;
+    background: white;
+    border-radius: 5px;
+    padding: 0 4px;
+    opacity: 0.95;
+    box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.05);
+}
+.fileContainer {
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+    border-radius: 0;
+}
+
+.fileUploader {
+    position: absolute;
+    bottom: 0;
+}
+.fileContainer button.chooseFileButton {
+    height: 50px;
+    margin: 0;
+    border-radius: 0;
+    background-color: var(--f7-color-red);
+}
+.fileContainer button.chooseFileButton:hover {
+    background-color: var(--f7-color-red-tint);
 }
