@@ -21,6 +21,8 @@ import SettingsPage from './SettingsPage';
 import FavoritesPage from "./FavoritesPage";
 
 import {getData} from '../../axios/getData'
+import {setData} from '../../axios/setData'
+import {authorisation} from "../../axios/login";
 import {handleLogin} from "../../actions/UserActions";
 import {
     handleCategories,
@@ -36,28 +38,83 @@ import {
 class initApplication {
     init = async (props) => {
         await get('user').then(value => value !== undefined && props.handleLogin(value));
-
         // from internet
         let detect = new Detector();
         if (detect.state.online) {
             let get_data = new getData();
-            await get_data.data('shops').then(value => value !== undefined && props.handleShops(value));
-            await get_data.data('favorite-shops').then(value => value !== undefined && props.handleFavoriteShops(value.result));
-            await get_data.data('categories').then(value => value !== undefined && props.handleCategories(value));
-            await get_data.data('userRequests').then(value => value !== undefined && props.handleRequests(value));
-            await get_data.data('cars').then(value => value !== undefined && props.handleCars(value));
-            await get_data.data('carbrands').then(value => value !== undefined && props.handleCarBrands(value));
-            await get_data.data('carmodels').then(value => value !== undefined && props.handleCarModels(value));
+            let set_data = new setData();
+            await get_data.data('details').then( async value => {
+                // if unregistered - register him
+               if (value === 401) {
+                   // 1. create unique user
+                   const random = Math.random();
+                   const login = `test${random}@test.ru`;
+                   const password = 'abS34T3fSg4';
+                   const payload = {
+                       name: `tmp_user_${random}`,
+                       email: login,
+                       password: password,
+                       c_password: password,
+                       initial: true
+                   };
+                   await set_data.data('register', payload).then(async data => {
+                       console.log(data);
+                       // auth user
+                       const auth = new authorisation();
+                       await auth.login(login, password).then( async response => {
+                           // записываем токен
+                           const user = response.data.success;
+                           await props.handleLogin(user);
+                           // переименовываем
+                           const id_user = response.data.success.id;
+                           const new_name = {name: `User_${id_user}`, email: `user_${id_user}@marshal-service.ru`};
+                           await set_data.dataPut(`user-update/${id_user}`, new_name).then( async () => {
+                               // обновляем стор
+                               user.name = new_name.name;
+                               user.email = new_name.email;
+                               await props.handleLogin(user);
+                           });
+                           // get data
+                           await this.getDataFromDB(props);
+                       });
+                       // 2. rename user to specific ID (user_ID)
+                   });
+               } else {
+                   await this.getDataFromDB(props);
+               }
+            });
         } else {
-            // from idb
-            await get('shops').then(value => value !== undefined && props.handleShops(value));
-            await get('favorite-shops').then(value => value !== undefined && props.handleFavoriteShops(value.result));
-            await get('categories').then(value => value !== undefined && props.handleCategories(value));
-            await get('userRequests').then(value => value !== undefined && props.handleRequests(value));
-            await get('cars').then(value => value !== undefined && props.handleCars(value));
-            await get('carbrands').then(value => value !== undefined && props.handleCarBrands(value));
-            await get('carmodels').then(value => value !== undefined && props.handleCarModels(value));
+            await this.getDataFromLS();
         }
+    };
+    getDataFromDB = async (props) => {
+        let get_data = new getData();
+        const shops = get_data.data('shops').then(value => value !== undefined && props.handleShops(value));
+        const favorite_shops = get_data.data('favorite-shops').then(value => value !== undefined && props.handleFavoriteShops(value.result));
+        const categories = get_data.data('categories').then(value => value !== undefined && props.handleCategories(value));
+        const userRequests = get_data.data('userRequests').then(value => value !== undefined && props.handleRequests(value));
+        const cars = get_data.data('cars').then(value => value !== undefined && props.handleCars(value));
+        const carbrands = get_data.data('carbrands').then(value => value !== undefined && props.handleCarBrands(value));
+        const carmodels = get_data.data('carmodels').then(value => value !== undefined && props.handleCarModels(value));
+
+        // wait all requests
+        await Promise.all([shops, favorite_shops, categories,userRequests,cars,carbrands, carmodels]).then(function(values) {
+            console.log(values);
+        });
+    };
+    getDataFromLS = async (props) => {
+        const shops = get('shops').then(value => value !== undefined && props.handleShops(value));
+        const favorite_shops = get('favorite-shops').then(value => value !== undefined && props.handleFavoriteShops(value.result));
+        const categories = get('categories').then(value => value !== undefined && props.handleCategories(value));
+        const userRequests = get('userRequests').then(value => value !== undefined && props.handleRequests(value));
+        const cars = get('cars').then(value => value !== undefined && props.handleCars(value));
+        const carbrands = get('carbrands').then(value => value !== undefined && props.handleCarBrands(value));
+        const carmodels = get('carmodels').then(value => value !== undefined && props.handleCarModels(value));
+
+        // wait all requests
+        await Promise.all([shops, favorite_shops, categories,userRequests,cars,carbrands, carmodels]).then(function(values) {
+            console.log(values);
+        });
     }
 }
 
@@ -71,7 +128,7 @@ class HomePage extends React.Component {
     }
 
     async componentDidMount() {
-        this.$f7.dialog.preloader('Загрузка...');
+        this.$f7.dialog.preloader('Пожалуйста подождите...');
         const initApp = new initApplication();
         await initApp.init(this.props);
         this.$f7.dialog.close();

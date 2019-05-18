@@ -14,7 +14,9 @@ export class getData {
             }
             return undefined;
         } catch (error) {
-            console.log(error.response);
+            if (error.response.status === 401) {
+                return 401
+            }
             return undefined;
         }
     };
