@@ -35,7 +35,7 @@ class RequestsPage extends React.Component {
     deleteRequest = (req_id) => {
         const set_data = new setData();
         if (req_id > 0) {
-            set_data.dataDelete('request-detele/'+req_id).then(() => {
+            set_data.dataDelete('request-delete/'+req_id).then(() => {
                 this.props.handleDeleteRequest(req_id);
             });
         }
