@@ -1,5 +1,6 @@
 import React from 'react';
 import {connect} from "react-redux";
+import { set } from 'idb-keyval';
 import {
     Page,
     List,
@@ -43,10 +44,11 @@ class LoginPage extends React.Component {
 
     async authentication() {
         const self = this;
-        self.$f7.dialog.preloader();
-
+        self.$f7.dialog.preloader('Пожалуйста подождите...');
+        set('AUTH_TOKEN', undefined).then();
+        set('user', undefined).then();
         const auth = new authorisation();
-        const { inputLogin, inputPassword} = this.state;
+        const { inputLogin, inputPassword } = this.state;
         const response = await auth.login(inputLogin, inputPassword);
         if (response.status === 401) {
             this.authError.open();
@@ -57,6 +59,11 @@ class LoginPage extends React.Component {
         self.$f7.dialog.close();
         this.props.handleLogin(response.data.success);
     }
+
+    register_user() {
+        this.$f7.views.main.router.navigate('/edit_user/');
+    }
+
     render() {
 
         const { inputLogin, inputPassword} = this.state;
@@ -89,8 +96,8 @@ class LoginPage extends React.Component {
 
                 <List>
                     <BlockFooter>
-                        <p><Link>Зарегистрироваться</Link></p>
-                        <p>Для восстановления пароля нажмите <Link>ссылку</Link></p>
+                        <p><Link onClick={()=>this.register_user()}>Зарегистрироваться</Link></p>
+                        {/*<p>Для восстановления пароля нажмите <Link>ссылку</Link></p>*/}
                     </BlockFooter>
                 </List>
             </Page>

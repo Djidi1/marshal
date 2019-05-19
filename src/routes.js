@@ -13,6 +13,7 @@ import ChatPage from "./components/pages/ChatPage";
 import CarsPage from "./components/pages/CarsPage";
 import StoresList from "./components/pages/StoresList";
 import LoginPage from "./components/pages/LoginPage";
+import EditUserPage from "./components/pages/EditUserPage";
 
 export default [
     {
@@ -38,6 +39,10 @@ export default [
     {
         path: '/login/',
         component: LoginPage,
+    },
+    {
+        path: '/edit_user/',
+        component: EditUserPage,
     },
     {
         path: '/messages/',
