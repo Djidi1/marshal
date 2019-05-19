@@ -22,7 +22,7 @@ class carsPage extends React.Component {
     deleteCar = (car_id) => {
         const set_data = new setData();
         if (car_id > 0) {
-            set_data.dataDelete('car-detele/'+car_id).then(() => {
+            set_data.dataDelete('car-delete/'+car_id).then(() => {
                this.props.handleDeleteCar(car_id);
             });
         }
