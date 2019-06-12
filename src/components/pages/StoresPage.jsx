@@ -34,6 +34,11 @@ class StoresPage extends React.Component {
         closeTimeout: 3000,
     });
 
+
+    editHandle(storeId) {
+        this.$f7.views.main.router.navigate('/open_store/' + storeId + '/');
+    }
+
     render() {
         const {shops, categories} = this.props;
         return (
@@ -64,6 +69,9 @@ class StoresPage extends React.Component {
                                                     after={item.phone}
                                                     subtitle={item.description}
                                                     text={item.address}
+                                                    // onClick={() => this.openHandle(item.id)}
+                                                    button
+                                                    link={`/open_store/${item.id}/`}
                                                 >
                                                     <span slot="title">
                                                         <Icon className={"status-icon"} material="store"

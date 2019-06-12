@@ -12,6 +12,7 @@ import ResponsePage from "./components/pages/ResponsePage";
 import ChatPage from "./components/pages/ChatPage";
 import CarsPage from "./components/pages/CarsPage";
 import StoresList from "./components/pages/StoresList";
+import StorePage from "./components/pages/StorePage";
 import LoginPage from "./components/pages/LoginPage";
 import EditUserPage from "./components/pages/EditUserPage";
 
@@ -59,6 +60,10 @@ export default [
     {
         path: '/open_request/:reqId/',
         component: NewRequestPage,
+    },
+    {
+        path: '/open_store/:storeId/',
+        component: StorePage,
     },
     {
         path: '/open_car/:carId/',
