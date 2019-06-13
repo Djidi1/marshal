@@ -10,7 +10,8 @@ import {
     CardHeader,
     CardContent,
     CardFooter,
-    Button
+    Button,
+    Chip
 } from 'framework7-react';
 import {setData} from "../../axios/setData";
 import {getData} from "../../axios/getData";
@@ -21,7 +22,11 @@ class StorePage extends React.Component {
     constructor() {
         super();
         this.state = {
-            store: {}
+            store: {
+                type: {},
+                categories: [],
+                car_brands: [],
+            }
         }
     }
 
@@ -64,6 +69,7 @@ class StorePage extends React.Component {
                               size="128px"
                               material="store"
                               color="green"/>
+                        <div>{store.type.type}</div>
                     </BlockTitle>
                     <Card>
                         <CardHeader
@@ -71,7 +77,7 @@ class StorePage extends React.Component {
                             valign="bottom"
                         >{store.name}
                             <Button
-                                color="yellow"
+                                color="green"
                                 onClick={() => this.toFavorite(store.id)}
                             >
                                 <Icon
@@ -83,8 +89,35 @@ class StorePage extends React.Component {
                         <CardContent>
                             <p>{store.description}.</p>
                         </CardContent>
+                        <CardContent>
+                                <h4>Марки автомобилей</h4>
+                            {
+                                store.car_brands.length ?
+                                store.car_brands.map(brand => {
+                                    return <Chip
+                                        key={brand.pivot.car_brand_id}
+                                        text={brand.car_brand}
+                                        media={brand.car_brand[0]}
+                                        mediaBgColor="main"
+                                    />
+                                }) : <Chip
+                                        text={"Все"}
+                                    />
+                            }
+                        </CardContent>
+                        <CardContent>
+                                <h4>Категории</h4>
+                            {
+                                store.categories.map(cat => {
+                                    return <Chip key={cat.id} text={cat.category}>
+                                            <span slot="media" className={'cat-icon-store'} dangerouslySetInnerHTML={{__html: cat.icon }} />
+                                        </Chip>
+                                })
+                            }
+                        </CardContent>
                         <CardFooter>
                             {store.address}
+                            {store.section}
                             <a
                                 className={"external"}
                                 href={`tel:${store.phone}`}
