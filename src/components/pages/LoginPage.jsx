@@ -8,7 +8,8 @@ import {
     Button,
     BlockFooter,
     Link,
-    LoginScreenTitle
+    LoginScreenTitle,
+    Navbar
 } from 'framework7-react';
 
 import { authorisation } from '../../axios/login'
@@ -70,6 +71,14 @@ class LoginPage extends React.Component {
 
         return (
             <Page loginScreen>
+                <Navbar
+                    color="white"
+                    textColor="white"
+                    bgColor="main"
+                    title=''
+                    backLink="Back"
+                >
+                </Navbar>
                 <LoginScreenTitle>Войти</LoginScreenTitle>
                 <List form>
                     <ListInput

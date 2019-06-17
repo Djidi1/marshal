@@ -14,6 +14,19 @@ import {getData} from "../../axios/getData";
 import {handleFavoriteShops} from "../../actions/DataActions";
 
 class StoresPage extends React.Component {
+    constructor() {
+        super();
+        this.myRef = React.createRef();
+        this.state = {
+            brand_ids: {},
+        }
+    }
+
+
+    handleBrand = (brand_ids) => {
+        this.setState({ brand_ids });
+    };
+
     toFavorite = (shop_id) => {
         const set_data = new setData();
         const get_data = new getData();
@@ -41,8 +54,49 @@ class StoresPage extends React.Component {
 
     render() {
         const {shops, categories} = this.props;
+        const self = this;
+
         return (
             <React.Fragment>
+                <List>
+                    <ListItem
+                        title="Марка автомобиля"
+                        smartSelect
+                        ref={this.myRef}
+                        smartSelectParams={{
+                            openIn: 'popup',
+                            searchbar: true,
+                            searchbarPlaceholder: 'Найти марку',
+                            popupCloseLinkText: 'Выбрать',
+                            on: {
+                                opened: function () {
+                                    let selected_items = this.items.filter(x => x.selected);
+                                    console.log('Smart select opened');
+                                    console.table(selected_items)
+                                },
+                                closed: function () {
+                                    let selected_items = this.items.filter(x => x.selected);
+                                    self.handleBrand(selected_items);
+                                    console.log('Smart select beforeDestroy');
+                                    console.table(selected_items)
+                                }
+                            }
+                        }}
+                        onChange={this.myRef.current !== null && console.table(this.myRef.current.f7SmartSelect.items) /*; () => {
+                            let selected_items = this.myRef;
+                            console.log('Smart select onChange');
+                            console.table(selected_items)
+                        }*/}
+                    >
+                        <select name="car" multiple defaultValue={['honda', 'audi', 'ford']} onChange={console.log(this)}>
+                                <option value="honda">Honda</option>
+                                <option value="lexus">Lexus</option>
+                                <option value="mazda">Mazda</option>
+                                <option value="nissan">Nissan</option>
+                                <option value="toyota">Toyota</option>
+                        </select>
+                    </ListItem>
+                </List>
                 <BlockTitle>Выберите интересующую вас категорию автотоваров:</BlockTitle>
                 <List accordionList>
                     {
