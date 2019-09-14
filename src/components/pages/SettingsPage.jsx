@@ -44,12 +44,12 @@ class SettingsPage extends React.Component {
                                 </span>
 
                                 <SwipeoutActions right>
-                                    <SwipeoutButton color="orange" onClick={() => this.logout()}>
+                                    <SwipeoutButton close color="orange" onClick={() => this.logout()}>
                                         <Icon material="exit_to_app"/> Выйти
                                     </SwipeoutButton>
                                 </SwipeoutActions>
                                 <SwipeoutActions left>
-                                    <SwipeoutButton color="blue" onClick={() => this.edit_user()}>
+                                    <SwipeoutButton close color="blue" onClick={() => this.edit_user()}>
                                         <Icon material="edit"/> Редактировать
                                     </SwipeoutButton>
                                 </SwipeoutActions>

@@ -75,12 +75,12 @@ class carsPage extends React.Component {
                                     }
                                 </span>
                                 <SwipeoutActions left>
-                                    <SwipeoutButton color="blue" onClick={() => this.editHandle(car.id)}>
+                                    <SwipeoutButton close color="blue" onClick={() => this.editHandle(car.id)}>
                                         <Icon material="edit"/> Изменить
                                     </SwipeoutButton>
                                 </SwipeoutActions>
                                 <SwipeoutActions right>
-                                    <SwipeoutButton color="#cb2128" onClick={() => this.deleteHandle(car.id)}>
+                                    <SwipeoutButton close color="#cb2128" onClick={() => this.deleteHandle(car.id)}>
                                         <Icon material="delete"/> Удалить
                                     </SwipeoutButton>
                             </SwipeoutActions>

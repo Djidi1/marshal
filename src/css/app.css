@@ -29,6 +29,7 @@ i.icon.marshal-icon {
 
 i.icon.status-icon {
     vertical-align: bottom;
+    width: 24px;
 }
 
 /*.messages-block {*/

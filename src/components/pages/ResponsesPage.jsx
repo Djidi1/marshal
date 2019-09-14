@@ -2,8 +2,9 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 
 import {Detector} from "react-detect-offline";
+import {setData} from "../../axios/setData";
 import {getData} from "../../axios/getData";
-import {handleResponse} from "../../actions/DataActions";
+import {handleRequest, handleResponse} from "../../actions/DataActions";
 import {get} from "idb-keyval";
 
 import {
@@ -14,6 +15,8 @@ import {
     ListItem,
     Block,
     Subnavbar,
+    SwipeoutActions,
+    SwipeoutButton,
 } from 'framework7-react';
 
 const getResponse = async (props, resp_id) => {
@@ -45,6 +48,29 @@ class ResponsesPage extends Component {
             this.$f7.dialog.close();
         });
     }
+
+    addToReserve = (answerId) => {
+        const {request, handleRequest} = this.props;
+        const set_data = new setData();
+        const get_data = new getData();
+        if (answerId > 0) {
+            const date = new Date();
+            date.setDate(date.getDate() + 3);
+            const payload = {reserve_date: date.toISOString().split('T')[0]};
+            set_data.dataPut('answer-update/' + answerId, payload).then(async () => {
+                await get_data.data('request/' + request.id).then(value => value !== undefined && handleRequest(value));
+                this.addFSSuccess.open();
+            });
+        }
+        return true;
+    };
+
+    addFSSuccess = this.$f7.notification.create({
+        icon: '<i class="icon marshal-icon"> </i>',
+        title: 'Маршал Сервис',
+        subtitle: 'Заказ добавлен в резерв на 3 дня',
+        closeTimeout: 3000,
+    });
 
     render() {
         const {request} = this.props;
@@ -80,31 +106,42 @@ class ResponsesPage extends Component {
                 </Navbar>
                 <List
                     mediaList
-                    noHairlinesMd
-                    linksList
-                    className={"list-with-header"}
+                    className={"no-margin list-with-header"}
                 >
                     {
                         request.answers.length === 0
                             ?
                             <Block>На ваш запрос пока нет ответов...</Block>
                             :
-                            request.answers.map(item => {
-                                return <ListItem
+                            request.answers.map(item =>
+                                <ListItem
                                     key={item.id}
+                                    button
+                                    swipeout
                                     onClick={() => this.open_response(item.id)}
-                                    after={item.created_at.toLocaleString()}
                                     subtitle={this.get_shop(item.shop_id)}
                                     text={item.description}
                                 >
+                                    {/*after={item.created_at.toLocaleString()}*/}
+                                    <span slot="after">
+                                        {item.in_stock ?
+                                            <Icon className={"status-icon"} material="check_circle" color="green"/> : null}
+                                        {item.original ?
+                                            <Icon className={"status-icon"} material="copyright" color="blue"/> : null}
+                                        {item.reserve_date ?
+                                            <Icon className={"status-icon"} material="event" color="orange"/> : null}
+                                        </span>
                                     <b slot="title">
-                                        {
-                                            item.is_new ? <Icon className={"status-icon"} material="fiber_new"
-                                                  color="green"/> : null
-                                        }
-                                        {item.price}</b>
+                                        {item.price} ₽</b>
+                                    {!item.reserve_date
+                                    ? <SwipeoutActions right>
+                                            <SwipeoutButton close color="orange" onClick={() => this.addToReserve(item.id)}>
+                                                <Icon material="event"/> Зарезервировать
+                                            </SwipeoutButton>
+                                        </SwipeoutActions>
+                                    : null}
                                 </ListItem>
-                            })
+                            )
                     }
                 </List>
             </Page>
@@ -124,6 +161,7 @@ const mapStateToProps = store => {
 
 const mapDispatchToProps = dispatch => {
     return {
+        handleRequest: request => dispatch(handleRequest(request)),
         handleResponse: request => dispatch(handleResponse(request)),
     }
 };

@@ -100,13 +100,13 @@ class StoreItem extends React.PureComponent {
                     !in_favorite
                         ?
                         <SwipeoutActions left>
-                            <SwipeoutButton color="blue" onClick={() => this.toFavorite(item.id)}>
+                            <SwipeoutButton close color="blue" onClick={() => this.toFavorite(item.id)}>
                                 <Icon material="favorite"/> В избранное
                             </SwipeoutButton>
                         </SwipeoutActions>
                         :
                         <SwipeoutActions right>
-                            <SwipeoutButton color="orange" onClick={() => this.removeFavorite(item.id)}>
+                            <SwipeoutButton close color="orange" onClick={() => this.removeFavorite(item.id)}>
                                 <Icon material="favorite"/> Из избранного
                             </SwipeoutButton>
                         </SwipeoutActions>

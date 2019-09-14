@@ -99,12 +99,12 @@ class RequestsPage extends React.Component {
                                         {this.get_category(item.category_id)}
                                     </span>
                                     <SwipeoutActions left>
-                                        <SwipeoutButton color="blue" onClick={() => this.edit_request(item.id)}>
+                                        <SwipeoutButton close color="blue" onClick={() => this.edit_request(item.id)}>
                                             <Icon material="edit"/> Редактировать
                                         </SwipeoutButton>
                                     </SwipeoutActions>
                                     <SwipeoutActions right>
-                                        <SwipeoutButton color="#cb2128" onClick={() => this.deleteHandle(item.id)}>
+                                        <SwipeoutButton close color="#cb2128" onClick={() => this.deleteHandle(item.id)}>
                                             <Icon material="delete"/> Удалить
                                         </SwipeoutButton>
                                     </SwipeoutActions>
