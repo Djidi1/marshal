@@ -148,3 +148,27 @@ DIV.store-header {
 .center {
     text-align: center;
 }
+#stores .toolbar-top {
+    top: 0;
+}
+#stores .toolbar-top i.icon.category-icon {
+    width: 28px;
+    height: 28px;
+    margin-top: 6px;
+}
+#stores .toolbar-top span.tabbar-label {
+    padding-bottom: 6px;
+    font-size: 10px;
+}
+i.icon.sub-title {
+    width: 16px;
+    height: 16px;
+    margin-right: 1px;
+}
+
+i.icon.fav-icon {
+    top: -12px;
+    right: -12px;
+    position: absolute;
+    font-size: 16px;
+}

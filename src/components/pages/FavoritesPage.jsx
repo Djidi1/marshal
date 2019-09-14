@@ -1,36 +1,14 @@
 import React from 'react';
 import {
     List,
-    ListItem,
-    SwipeoutActions,
-    SwipeoutButton,
-    Icon,
 } from 'framework7-react';
 import {connect} from "react-redux";
-import {setData} from "../../axios/setData";
-import {handleFavoriteShopDelete} from "../../actions/DataActions";
+import StoreItem from "../elements/StoreItem";
 
 class FavoritesPage extends React.Component {
-
-    removeFavorite = (shop_id) => {
-        const set_data = new setData();
-        if (shop_id > 0) {
-            set_data.dataPut('favorite-shop-remove/'+shop_id, {}).then(async () => {
-                this.props.handleFavoriteShopDelete(shop_id);
-                this.addFSSuccess.open();
-            });
-        }
-    };
-
-    addFSSuccess = this.$f7.notification.create({
-        icon: '<i class="icon marshal-icon"> </i>',
-        title: 'Маршал Сервис',
-        subtitle: 'Магазин удален из избранного',
-        closeTimeout: 3000,
-    });
-
     render() {
-        const {favorite_shops} = this.props;
+        const {favorite_shops, shops} = this.props;
+        const fav_shops = shops.filter(x => favorite_shops.find(y => y.id === x.id));
         return (
             <div>
                 <h1>Избранное</h1>
@@ -38,27 +16,14 @@ class FavoritesPage extends React.Component {
                     mediaList
                     className={"no-margin"}
                 >
-                    {
-                        (favorite_shops.length) ?
-                        favorite_shops.map(item =>
-                            <ListItem
-                                key={item.id}
-                                swipeout
-                                after={item.phone}
-                                subtitle={item.description}
-                                text={item.address}
-                            >
-                                <span slot="title">
-                                    <Icon className={"status-icon"} material="store" color="purple"/> {item.name}
-                                </span>
-                                <SwipeoutActions right>
-                                    <SwipeoutButton color="orange" onClick={() => this.removeFavorite(item.id)}>
-                                        <Icon material="favorite"/> Из избранного
-                                    </SwipeoutButton>
-                                </SwipeoutActions>
-                            </ListItem>
-                        ) : "Вы можете добавить любимые магазины в избранное."
-                    }
+                    <ul>
+                        {
+                            (fav_shops.length) ?
+                                fav_shops.map(item =>
+                                    <StoreItem in_favorite={true} key={item.id} item={item}/>
+                                ) : "Вы можете добавить любимые магазины в избранное."
+                        }
+                    </ul>
                 </List>
             </div>
         );
@@ -68,13 +33,9 @@ class FavoritesPage extends React.Component {
 const mapStateToProps = store => {
     return {
         favorite_shops: store.stores.favorite_shops,
+        shops: store.stores.shops,
     }
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        handleFavoriteShopDelete: data => dispatch(handleFavoriteShopDelete(data)),
-    }
-};
 
-export default connect(mapStateToProps, mapDispatchToProps)(FavoritesPage)
+export default connect(mapStateToProps)(FavoritesPage)
