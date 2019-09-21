@@ -29,6 +29,7 @@ i.icon.marshal-icon {
 
 i.icon.status-icon {
     vertical-align: bottom;
+    width: 24px;
 }
 
 /*.messages-block {*/
@@ -76,13 +77,25 @@ h1 {
 .btn-new-request{
     bottom: 8px !important;
 }
-
+span.cat-icon-store {
+    flex: 1 1;
+    background: #EEEEEE;
+    padding: 4px;
+    height: 24px;
+    border-radius: 15px;
+}
 span.cat-icon svg {
     flex: 1 1;
     width: 40px;
     margin-right: 8px;
 }
-span.cat-icon svg .fil0 {
+.main-color {
+    color: var(--f7-color-red);
+}
+.bg-color-main {
+    background-color: var(--f7-color-red);
+}
+span.cat-icon svg .fil0, span.cat-icon-store svg .fil0 {
     fill: var(--f7-color-red);
 }
 span.cat-icon {
@@ -125,4 +138,51 @@ span.categories-list {
 }
 .fileContainer button.chooseFileButton:hover {
     background-color: var(--f7-color-red-tint);
+}
+
+
+DIV.store-header {
+    background: #999999;
+    color: #fff;
+}
+
+.center {
+    text-align: center;
+}
+
+#stores .page {
+    padding-top: var(--f7-navbar-height);
+    padding-bottom: 60px;
+}
+
+#stores .page-content {
+    padding-top: 0;
+    padding-bottom: 60px;
+    height: calc(100vh - 160px);
+}
+
+#stores .toolbar-top {
+    position: relative;
+    top: 0;
+}
+#stores .toolbar-top i.icon.category-icon {
+    width: 28px;
+    height: 28px;
+    margin-top: 6px;
+}
+#stores .toolbar-top span.tabbar-label {
+    padding-bottom: 6px;
+    font-size: 10px;
+}
+i.icon.sub-title {
+    width: 16px;
+    height: 16px;
+    margin-right: 1px;
+}
+
+i.icon.fav-icon {
+    top: -12px;
+    right: -12px;
+    position: absolute;
+    font-size: 16px;
 }
