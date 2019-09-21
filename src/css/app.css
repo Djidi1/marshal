@@ -149,7 +149,20 @@ DIV.store-header {
 .center {
     text-align: center;
 }
+
+#stores .page {
+    padding-top: var(--f7-navbar-height);
+    padding-bottom: 60px;
+}
+
+#stores .page-content {
+    padding-top: 0;
+    padding-bottom: 60px;
+    height: calc(100vh - 160px);
+}
+
 #stores .toolbar-top {
+    position: relative;
     top: 0;
 }
 #stores .toolbar-top i.icon.category-icon {

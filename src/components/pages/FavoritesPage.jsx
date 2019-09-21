@@ -1,6 +1,7 @@
 import React from 'react';
 import {
     List,
+    BlockTitle,
 } from 'framework7-react';
 import {connect} from "react-redux";
 import StoreItem from "../elements/StoreItem";
@@ -10,22 +11,26 @@ class FavoritesPage extends React.Component {
         const {favorite_shops, shops} = this.props;
         const fav_shops = shops.filter(x => favorite_shops.find(y => y.id === x.id));
         return (
-            <div>
+            <>
                 <h1>Избранное</h1>
-                <List
-                    mediaList
-                    className={"no-margin"}
-                >
-                    <ul>
-                        {
-                            (fav_shops.length) ?
-                                fav_shops.map(item =>
-                                    <StoreItem in_favorite={true} key={item.id} item={item}/>
-                                ) : "Вы можете добавить любимые магазины в избранное."
-                        }
-                    </ul>
-                </List>
-            </div>
+                {
+                    (fav_shops.length) ?
+                        <List
+                            mediaList
+                            className={"no-margin"}
+                        >
+                            <ul>
+                                {
+                                    fav_shops.map(item =>
+                                        <StoreItem in_favorite={true} key={item.id} item={item}/>
+                                    )
+                                }
+                            </ul>
+                        </List> : <BlockTitle
+                            style={{whiteSpace: 'initial'}}
+                        >Вы пока не добавили магазины в избранное</BlockTitle>
+                }
+            </>
         );
     }
 }

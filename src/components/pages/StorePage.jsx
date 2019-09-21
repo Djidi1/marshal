@@ -15,7 +15,7 @@ import {
 } from 'framework7-react';
 import {setData} from "../../axios/setData";
 import {getData} from "../../axios/getData";
-import {handleFavoriteShops} from "../../actions/DataActions";
+import {handleFavoriteShopDelete, handleFavoriteShops} from "../../actions/DataActions";
 
 class StorePage extends React.Component {
 
@@ -26,37 +26,67 @@ class StorePage extends React.Component {
                 type: {},
                 categories: [],
                 car_brands: [],
-            }
+            },
+            in_favorite: false
         }
     }
 
-    toFavorite = (shop_id) => {
+    componentDidMount() {
+        const store_id = Number(this.$f7route.params.storeId);
+        const {shops, favorite_shops} = this.props;
+        const store = shops.find(shop => shop.id === store_id);
+        const in_favorite = !!favorite_shops.find(x => x.id === store.id);
+        this.setState({store, in_favorite});
+    }
+
+    add = ($f7, shop_id) => {
         const set_data = new setData();
         const get_data = new getData();
         if (shop_id > 0) {
             set_data.dataPut('favorite-shop-add/'+shop_id, {}).then(async () => {
-                await get_data.data('favorite-shops').then(value => value !== undefined && this.props.handleFavoriteShops(value.result));
-                // todo брать с сервера ответ с магазином, который был добавлен в избранное
-                //this.props.handleFavoriteShopAdd(shop_id);
-                this.addFSSuccess.open();
+                await get_data.data('favorite-shops').then(value => {
+                    value !== undefined && this.props.handleFavoriteShops(value.result);
+                    $f7.notification.create({
+                        icon: '<i class="icon marshal-icon"> </i>',
+                        title: 'Маршал Сервис',
+                        subtitle: 'Магазин добавлен в избранные',
+                        closeTimeout: 3000,
+                    }).open();
+                    this.setState({in_favorite: !this.state.in_favorite});
+                });
             });
         }
     };
 
-    addFSSuccess = this.$f7.notification.create({
-        icon: '<i class="icon marshal-icon"> </i>',
-        title: 'Маршал Сервис',
-        subtitle: 'Магазин добавлен в избранные',
-        closeTimeout: 3000,
-    });
-    componentDidMount() {
-        const store_id = Number(this.$f7route.params.storeId);
-        const store = this.props.shops.find(shop => shop.id === store_id);
-        this.setState({store});
-    }
+    remove = ($f7, shop_id) => {
+        const set_data = new setData();
+        if (shop_id > 0) {
+            set_data.dataPut('favorite-shop-remove/' + shop_id, {}).then(async () => {
+                this.props.handleFavoriteShopDelete(shop_id);
+                $f7.notification.create({
+                    icon: '<i class="icon marshal-icon"> </i>',
+                    title: 'Маршал Сервис',
+                    subtitle: 'Магазин удален из избранного',
+                    closeTimeout: 3000,
+                }).open();
+                this.setState({in_favorite: !this.state.in_favorite});
+            });
+        }
+    };
+
+    handleFavorite = async (type, store_id) => {
+        const f7 = this.$f7;
+        if (type === 'add') {
+            await this.add(f7, store_id);
+        } else {
+            await this.remove(f7, store_id);
+        }
+
+    };
 
     render() {
-        const {store} = this.state;
+        const {store, in_favorite} = this.state;
+
         return (
             <Page>
                 <Navbar
@@ -65,7 +95,7 @@ class StorePage extends React.Component {
                 />
                 <Block strong>
                     <BlockTitle className={"center"}>
-                        <Icon className={"status-icon"}
+                        <Icon
                               size="128px"
                               material="store"
                               color="green"/>
@@ -76,15 +106,16 @@ class StorePage extends React.Component {
                             className="no-border store-header"
                             valign="bottom"
                         >{store.name}
-                            <Button
-                                color="green"
-                                onClick={() => this.toFavorite(store.id)}
-                            >
-                                <Icon
-                                    material="favorite"
-                                    size="24px"
-                                />
-                            </Button>
+                            {
+                                !in_favorite
+                                    ? <Button color="white" onClick={() => this.handleFavorite('add',store.id)}>
+                                        <Icon material="favorite_border" size="24px"/>
+                                    </Button>
+                                    : <Button color="orange" onClick={() => this.handleFavorite('remove',store.id)}>
+                                        <Icon material="favorite" size="24px"/>
+                                    </Button>
+                            }
+
                         </CardHeader>
                         <CardContent>
                             <p>{store.description}.</p>
@@ -133,6 +164,7 @@ class StorePage extends React.Component {
 
 const mapStateToProps = store => {
     return {
+        favorite_shops: store.stores.favorite_shops,
         shops: store.stores.shops,
     }
 };
@@ -140,6 +172,7 @@ const mapStateToProps = store => {
 const mapDispatchToProps = dispatch => {
     return {
         handleFavoriteShops: data => dispatch(handleFavoriteShops(data)),
+        handleFavoriteShopDelete: data => dispatch(handleFavoriteShopDelete(data)),
     }
 };
 

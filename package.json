@@ -1,23 +1,23 @@
 {
   "name": "marshal-service",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "private": true,
   "homepage": ".",
   "dependencies": {
-    "axios": "^0.18.0",
-    "framework7": "^4.3.1",
+    "axios": "^0.18.1",
+    "framework7": "^4.5.0",
     "framework7-icons": "^2.3.1",
-    "framework7-react": "^4.3.1",
+    "framework7-react": "^4.5.0",
     "idb-keyval": "^3.2.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.15",
     "material-design-icons": "^3.0.1",
-    "react": "^16.8.6",
-    "react-detect-offline": "^2.3.0",
-    "react-dom": "^16.8.6",
-    "react-images-upload": "^1.2.6",
+    "react": "^16.9.0",
+    "react-detect-offline": "^2.4.0",
+    "react-dom": "^16.9.0",
+    "react-images-upload": "^1.2.7",
     "react-redux": "^6.0.1",
     "react-scripts": "^2.1.8",
-    "redux": "^4.0.1",
+    "redux": "^4.0.4",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0"
   },
@@ -34,7 +34,7 @@
   "devDependencies": {
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "cpy-cli": "^2.0.0",
-    "gh-pages": "^2.0.1"
+    "gh-pages": "^2.1.1"
   },
   "browserslist": {
     "development": [

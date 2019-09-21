@@ -98,8 +98,8 @@ class initApplication {
         const carmodels = get_data.data('carmodels').then(value => value !== undefined && props.handleCarModels(value));
 
         // wait all requests
-        await Promise.all([shops, favorite_shops, categories,userRequests,cars,carbrands, carmodels]).then(function(values) {
-            console.log(values);
+        await Promise.all([shops, favorite_shops, categories,userRequests,cars,carbrands, carmodels]).then(() => {
+            console.log('loaded from DB');
         });
     };
     getDataFromLS = async (props) => {
@@ -112,8 +112,8 @@ class initApplication {
         const carmodels = get('carmodels').then(value => value !== undefined && props.handleCarModels(value));
 
         // wait all requests
-        await Promise.all([shops, favorite_shops, categories,userRequests,cars,carbrands, carmodels]).then(function(values) {
-            console.log(values);
+        await Promise.all([shops, favorite_shops, categories,userRequests,cars,carbrands, carmodels]).then(() => {
+            console.log('loaded from LS');
         });
     }
 }

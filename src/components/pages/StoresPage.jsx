@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from "react-redux";
 import {
+    Page,
     List,
     Icon,
     BlockTitle,
@@ -21,7 +22,7 @@ class StoresPage extends React.Component {
         }
     }
 
-    componentWillUpdate(prevProps) {
+    componentDidUpdate(prevProps) {
         const {categories, carbrands} = this.props;
         if (this.props.carbrands !== prevProps.carbrands) {
             if (categories[0] && carbrands[0]) {
@@ -85,7 +86,7 @@ class StoresPage extends React.Component {
         });
 
         return (
-            <>
+            <Page pageContent={true}>
                 <Toolbar themeDark tabbar scrollable position='top'>
                     {carbrands.map((brand) => (
                         <Link
@@ -131,7 +132,7 @@ class StoresPage extends React.Component {
                         }
                     </ul>
                 </List>
-            </>
+            </Page>
         );
     }
 }
