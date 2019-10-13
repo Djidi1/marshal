@@ -14,6 +14,9 @@
     --f7-toolbar-link-color: #cb2128;
 
 }
+.statusbar {
+    background: #cb2128;
+}
 
 /*cb2128 */
 i.icon.marshal-icon {
