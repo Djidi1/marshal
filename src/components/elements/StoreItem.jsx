@@ -89,16 +89,20 @@ class StoreItem extends React.PureComponent {
                             icon='sub-title category-icon'
                             style={{background: this.convertIcon(cat.icon)}}
                         />
-                    })}
+                    })} {item.description}
                 </span>
-                <span slot="after" className="car-brands">
+                <span slot="text">
+                    {item.address}
+                    <span className="car-brands">
                         {item.car_brands.length > 0
-                          ? item.car_brands.map(item => item.car_brand).join(', ')
-                          : 'Все марки'
+                            ? item.car_brands.map(item => item.car_brand).join(', ')
+                            : 'Все марки'
                         }
                     </span>
-                <span slot="text">
-                    {item.description}
+                </span>
+                <span slot="after">
+                    {item.phone}
+                    {in_favorite ? <Icon className="fav-icon" color="orange" material="favorite"/> : null }
                 </span>
                 {
                     !in_favorite

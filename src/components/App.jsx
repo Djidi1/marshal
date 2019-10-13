@@ -16,7 +16,6 @@ import {
     Block,
 } from 'framework7-react';
 
-
 import routes from '../routes';
 
 export default function (props) {
