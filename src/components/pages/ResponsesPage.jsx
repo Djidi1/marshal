@@ -132,7 +132,13 @@ class ResponsesPage extends Component {
                                             <Icon className={"status-icon"} material="event" color="orange"/> : null}
                                         </span>
                                     <b slot="title">
-                                        {item.price} ₽</b>
+                                        {item.price} ₽
+                                    </b>
+                                    <span className="car-brands" slot="text">
+                                        {item.reserve_date
+                                            ? `В резерве до ${item.reserve_date.toLocaleString().slice(0,10)}`
+                                            : null}
+                                    </span>
                                     {!item.reserve_date
                                     ? <SwipeoutActions right>
                                             <SwipeoutButton close color="orange" onClick={() => this.addToReserve(item.id)}>

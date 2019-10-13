@@ -191,6 +191,7 @@ i.icon.fav-icon {
 .car-brands {
     width: 50%;
     right: 0;
+    top: 0;
     text-align: right;
     font-weight: bold;
     position: absolute;
