@@ -179,10 +179,35 @@ i.icon.sub-title {
     height: 16px;
     margin-right: 1px;
 }
-
 i.icon.fav-icon {
     top: -12px;
     right: -12px;
     position: absolute;
     font-size: 16px;
+}
+.sheet-modal-inner .page-content {
+    overflow: hidden;
+}
+.car-brands {
+    width: 50%;
+    right: 0;
+    text-align: right;
+    font-weight: bold;
+    position: absolute;
+}
+.display-flex .chip, .display-flex span {
+    font-weight: bold;
+    flex: 1 1 0;
+    margin: 12px 3px;
+    text-align: center;
+}
+
+.display-flex span.flex-direction-column {
+    margin-bottom: -20px;
+}
+.filter-title {
+    font-weight: bold;
+    top: 6px;
+    left: 12px;
+    position: relative;
 }

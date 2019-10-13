@@ -3,15 +3,13 @@ import {connect} from "react-redux";
 import {
     Page,
     List,
-    Icon,
     BlockTitle,
-    Toolbar,
-    Link,
 } from 'framework7-react';
 import {setData} from "../../axios/setData";
 import {getData} from "../../axios/getData";
 import {handleFavoriteShops} from "../../actions/DataActions";
-import StoreItem from '../elements/StoreItem'
+import StoreItem from '../elements/StoreItem';
+import StoreSelect from '../elements/StoreSelect';
 
 class StoresPage extends React.Component {
     constructor() {
@@ -82,41 +80,17 @@ class StoresPage extends React.Component {
         const filtered_shops = shops.filter(x => {
             return x.categories.find(y => y.id === category_id)
                 && (x.car_brands.find(y => y.pivot.car_brand_id === brand_id)
-                    || !!x.car_brands)
+                    || x.car_brands.length === 0)
         });
 
         return (
             <Page pageContent={true}>
-                <Toolbar themeDark tabbar scrollable position='top'>
-                    {carbrands.map((brand) => (
-                        <Link
-                            key={brand.id}
-                            tabLink={`#tab-${brand.id}`}
-                            tabLinkActive={brand.id === brand_id}
-                            onClick={() => this.handleBrand(brand.id)}
-                        >{brand.car_brand}</Link>
-                    ))}
-                </Toolbar>
-                <Toolbar tabbar labels scrollable position='top'>
-                    {categories.sort((a, b) => {
-                        return a.category < b.category ? -1 : 1
-                    })
-                        .map((cat) => {
-                            return <Link
-                                key={cat.id}
-                                tabLink={`#tab-${cat.id}`}
-                                tabLinkActive={cat.id === category_id}
-                                onClick={() => this.handleCategory(cat.id)}
-                            >
-                                <Icon
-                                    icon='category-icon'
-                                    style={{background: this.convertIcon(cat.icon)}}
-                                />
-                                <span className='tabbar-label'>{cat.category}</span>
-                            </Link>
-                        }
-                    )}
-                </Toolbar>
+                <StoreSelect
+                    carbrands={carbrands}
+                    handleBrand={this.handleBrand}
+                    categories={categories}
+                    handleCategory={this.handleCategory}
+                />
                 <List
                     mediaList
                     className={"no-margin"}

@@ -78,7 +78,6 @@ class StoreItem extends React.PureComponent {
                 button
                 swipeout
                 link={`/open_store/${item.id}/`}
-                text={item.address}
             >
                 <strong slot="title">
                     {item.name}
@@ -91,6 +90,15 @@ class StoreItem extends React.PureComponent {
                             style={{background: this.convertIcon(cat.icon)}}
                         />
                     })} {item.description}
+                </span>
+                <span slot="text">
+                    {item.address}
+                    <span className="car-brands">
+                        {item.car_brands.length > 0
+                            ? item.car_brands.map(item => item.car_brand).join(', ')
+                            : 'Все марки'
+                        }
+                    </span>
                 </span>
                 <span slot="after">
                     {item.phone}
