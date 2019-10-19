@@ -85,7 +85,8 @@ class StorePage extends React.Component {
     };
 
     render() {
-        const {store, in_favorite} = this.state;
+        const { store, in_favorite } = this.state;
+        const { storeId } = this.props;
 
         return (
             <Page>
@@ -119,8 +120,6 @@ class StorePage extends React.Component {
                         </CardHeader>
                         <CardContent>
                             <p>{store.description}.</p>
-                        </CardContent>
-                        <CardContent>
                                 <h4>Марки автомобилей</h4>
                             {
                                 store.car_brands.length ?
@@ -135,8 +134,6 @@ class StorePage extends React.Component {
                                         text={"Все"}
                                     />
                             }
-                        </CardContent>
-                        <CardContent>
                                 <h4>Категории</h4>
                             {
                                 store.categories.map(cat => {
@@ -145,6 +142,14 @@ class StorePage extends React.Component {
                                         </Chip>
                                 })
                             }
+                        </CardContent>
+                        <CardContent>
+                            <Button
+                                href={`/open_request/0/${storeId}/`}
+                                fill
+                            >
+                                Написать в магазин
+                            </Button>
                         </CardContent>
                         <CardFooter>
                             {store.address}

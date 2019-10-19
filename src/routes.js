@@ -58,6 +58,10 @@ export default [
         component: DynamicRoutePage,
     },
     {
+        path: '/open_request/:reqId/:storeId/',
+        component: NewRequestPage,
+    },
+    {
         path: '/open_request/:reqId/',
         component: NewRequestPage,
     },

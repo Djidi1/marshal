@@ -1,11 +1,6 @@
 import React, {Component} from 'react';
-import Picker from 'react-mobile-picker';
 import {
-    PageContent,
-    Sheet,
-    Toolbar,
-    Link,
-    Chip,
+    ListInput
 } from 'framework7-react';
 
 
@@ -13,7 +8,6 @@ export default class StoreSelect extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isPickerShow: false,
             valueGroups: {
                 type: 'Товар',
                 carBrand: '',
@@ -23,7 +17,12 @@ export default class StoreSelect extends Component {
                 type: ['Товар', 'Ремонт/Услуга'],
                 carBrand: [''],
                 category: ['']
-            }
+            },
+            colorsGroups: {
+                type: 'orange',
+                carBrand: 'teal',
+                category: 'blue'
+            },
         };
     }
 
@@ -72,46 +71,39 @@ export default class StoreSelect extends Component {
             }
         }
     };
-
-    togglePicker = () => {
-        this.setState(({isPickerShow}) => ({
-            isPickerShow: !isPickerShow
-        }));
-    };
-
+/**/
     render() {
-        const {isPickerShow, optionGroups, valueGroups} = this.state;
+        const {optionGroups, valueGroups, colorsGroups} = this.state;
 
         return (
             <>
                 <span className="filter-title">Фильтр по магазинам</span>
-                <div className="display-flex padding-horizontal-half" onClick={this.togglePicker}>
-                    <Chip className="flex-direction-column" text={valueGroups.type} color="orange" />
-                    <Chip className="flex-direction-column" text={valueGroups.carBrand} color="teal" />
-                    <Chip className="flex-direction-column" text={valueGroups.category} color="blue" />
+                <div className="display-flex padding-horizontal-half">
+                    {Object.keys(optionGroups).map((type) => {
+                        const group = optionGroups[type];
+                        return (
+                            <ListInput
+                                key={`group_${type}`}
+                                className={`chip flex-direction-column color-${colorsGroups[type]}`}
+                                type="select"
+                                placeholder="Выберите..."
+                                value={valueGroups[type]}
+                                onChange={(event) => this.handleChange(type, event.target.value)}
+                            >
+                                { type !== 'type' && <option key={0} value={null}>Все</option> }
+                                {
+                                    group.map((item, index) => (
+                                        <option
+                                            key={`select_${type}_${index}`}
+                                            value={item}
+                                        >{item}</option>
+                                    ))
+                                }
+                            </ListInput>
+                        )
+                    })
+                    }
                 </div>
-                <Sheet className="demo-sheet" opened={isPickerShow} onSheetClosed={() => {this.setState({isPickerShow: false})}}>
-                    <Toolbar>
-                        <div className="left">
-                            <span className="padding">Фильтр по магазинам</span>
-                        </div>
-                        <div className="right">
-                            <Link onClick={this.togglePicker} sheetClose>OK</Link>
-                        </div>
-                    </Toolbar>
-                    <PageContent>
-                        <div className="display-flex padding-horizontal-half">
-                            <span className="flex-direction-column">Тип</span>
-                            <span className="flex-direction-column">Марка</span>
-                            <span className="flex-direction-column">Категория</span>
-                        </div>
-                        <Picker
-                            optionGroups={optionGroups}
-                            valueGroups={valueGroups}
-                            onChange={this.handleChange} />
-                    </PageContent>
-                </Sheet>
-
             </>
         );
     }

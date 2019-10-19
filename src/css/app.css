@@ -215,3 +215,18 @@ i.icon.fav-icon {
     left: 12px;
     position: relative;
 }
+
+.chip .input-dropdown select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    font-weight: bold;
+    padding: 7px 0;
+    text-align-last: center;
+}
+.chip .input-dropdown::before, .chip .input-dropdown::after {
+    display: none !important;
+}
+.chip .input-dropdown select::-ms-expand {
+    display: none;
+}

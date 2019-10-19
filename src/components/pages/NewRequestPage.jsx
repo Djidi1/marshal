@@ -7,7 +7,6 @@ import {
     Block,
     BlockTitle,
     Button,
-    Chip,
 } from 'framework7-react';
 import connect from "react-redux/es/connect/connect";
 
@@ -92,6 +91,7 @@ class NewRequestPage extends Component {
     componentDidMount() {
         const initData = {};
         const req_id = Number(this.$f7route.params.reqId);
+        const store_id = Number(this.$f7route.params.storeId);
 
         if (req_id > 0) {
             const request = this.props.requests.find(request => request.id === req_id);
@@ -103,6 +103,8 @@ class NewRequestPage extends Component {
             initData.shop_id = request.shop_id;
             initData.selected_shops = [request.shop_id];
             this.setState(initData);
+        } else if (store_id > 0) {
+            this.setState({shop_id: store_id, selected_shops: [store_id],});
         }
     }
 
@@ -177,27 +179,15 @@ class NewRequestPage extends Component {
                         onChange={(event) => this.handleData('text', event.target.value)}
                     />
 
-                    <BlockTitle>Запрос в магазин:
+                    <BlockTitle>Заявка в магазин:
+                        { selectedShops.map((item, index) => <b key={index}> {item.name}</b>) }
                         <Button
                             small
                             fill
                             onClick={() => this.set_stores()}
                             style={{float: 'right', display: 'inline-block'}}
-                        >Выбрать</Button>
+                        >{selectedShops.length ? 'Изменить' : 'Выбрать'}</Button>
                     </BlockTitle>
-                    {
-                        selectedShops.length > 0 ?
-                            (
-                                <Block strong>
-                                    {
-                                        selectedShops.map((item, index) => {
-                                            return <Chip key={index} text={item.name}/>
-                                        })
-                                    }
-                                </Block>
-                            )
-                            : null
-                    }
                 </List>
                 <Block>
                     <Button
