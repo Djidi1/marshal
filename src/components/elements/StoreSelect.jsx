@@ -10,13 +10,13 @@ export default class StoreSelect extends Component {
         this.state = {
             valueGroups: {
                 type: 'Товар',
-                carBrand: '',
-                category: ''
+                carBrand: 'Все',
+                category: 'Все'
             },
             optionGroups: {
                 type: ['Товар', 'Ремонт/Услуга'],
-                carBrand: [''],
-                category: ['']
+                carBrand: ['Все'],
+                category: ['Все']
             },
             colorsGroups: {
                 type: 'orange',
@@ -38,11 +38,6 @@ export default class StoreSelect extends Component {
                         carBrand: names_only_brands,
                         category: names_only_categories,
                     },
-                    valueGroups: {
-                        ...valueGroups,
-                        carBrand: names_only_brands[0],
-                        category: names_only_categories[0],
-                    }
                 }))
             }
         }
@@ -56,22 +51,23 @@ export default class StoreSelect extends Component {
                     ...valueGroups,
                     [name]: value
                 }
-            }));
-            if (name === 'carBrand') {
-                const item = carbrands.find(x => x.car_brand === value);
-                if (item) {
-                    handleBrand(item.id);
+            }), () => {
+                if (name === 'carBrand') {
+                    const item = carbrands.find(x => x.car_brand === value);
+                    if (item || Number(value) === 0) {
+                        handleBrand(Number(value) === 0 ? 0 : item.id);
+                    }
                 }
-            }
-            if (name === 'category') {
-                const item = categories.find(x => x.category === value);
-                if (item) {
-                    handleCategory(item.id);
+                if (name === 'category') {
+                    const item = categories.find(x => x.category === value);
+                    if (item || Number(value) === 0) {
+                        handleCategory(Number(value) === 0 ? 0 : item.id);
+                    }
                 }
-            }
+            });
         }
     };
-/**/
+
     render() {
         const {optionGroups, valueGroups, colorsGroups} = this.state;
 
@@ -90,7 +86,7 @@ export default class StoreSelect extends Component {
                                 value={valueGroups[type]}
                                 onChange={(event) => this.handleChange(type, event.target.value)}
                             >
-                                { type !== 'type' && <option key={0} value={null}>Все</option> }
+                                { type !== 'type' && <option key={0} value={0}>Все</option> }
                                 {
                                     group.map((item, index) => (
                                         <option

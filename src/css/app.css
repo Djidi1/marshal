@@ -154,8 +154,9 @@ DIV.store-header {
 }
 
 #stores .page {
-    padding-top: var(--f7-navbar-height);
+    top: 140px;
     padding-bottom: 60px;
+    height: calc(100vh - 140px);
 }
 
 #stores .page-content {
