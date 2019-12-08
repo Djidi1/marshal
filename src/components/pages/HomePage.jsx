@@ -1,7 +1,9 @@
 import React from 'react';
-import { get } from 'idb-keyval';
+import { get, set } from 'idb-keyval';
 import {connect} from "react-redux";
 import { Offline, Detector } from "react-detect-offline";
+import 'intro.js/introjs.css';
+import { Steps } from 'intro.js-react';
 
 import {
     Page,
@@ -123,7 +125,10 @@ class HomePage extends React.Component {
     constructor() {
         super();
         this.state = {
-            title: "Заявки",
+            title: "Мои заказы",
+            current_tab: undefined,
+            loaded: false,
+            stepsEnabled: false,
         }
     }
 
@@ -131,8 +136,23 @@ class HomePage extends React.Component {
         this.$f7.dialog.preloader('Пожалуйста подождите...');
         const initApp = new initApplication();
         await initApp.init(this.props);
+        get('current_tab').then(current_tab => {
+            current_tab !== undefined
+            && this.setState({current_tab})
+            && this.$f7.tab.show(`#${current_tab}`,`#${current_tab}`);
+        });
+        get('stepsEnabled').then(value => {
+            const stepsEnabled = value === undefined;
+            this.setState({stepsEnabled});
+        });
         this.$f7.dialog.close();
     }
+
+    handleTurnOffIntro = () => {
+        set('stepsEnabled', false).then(() => {
+            this.setState({stepsEnabled: false});
+        });
+    };
 
     new_request(reqId) {
         const app = this.$f7;
@@ -140,14 +160,42 @@ class HomePage extends React.Component {
         return false;
     }
 
-    chgTitle = (title) => {
+    chgTitle = (title, tab) => {
         this.setState({title: title});
+        set('current_tab', tab).then(() => {
+            this.$f7.tab.show(`#${tab}`,`#${tab}`, true);
+        });
     };
 
+
     render() {
-        const { title } = this.state;
+        const { loaded, title, current_tab, stepsEnabled } = this.state;
+        const steps = [
+            {
+                element: '.toolbar.tabbar',
+                intro: 'В нижней части экрана расположена навигация по приложению.',
+            },
+            {
+                element: '.btn-new-request',
+                intro: 'Нажмите эту кнопку для добавления нового запроса.',
+            },
+        ];
+        const options = {
+            nextLabel: 'Далее',
+            prevLabel: 'Назад',
+            skipLabel: 'Пропустить',
+            doneLabel: 'Завершить',
+        };
+        const initialStep = 0;
         return (
             <Page hideToolbarOnScroll pageContent={false}>
+                <Steps
+                    enabled={stepsEnabled}
+                    steps={steps}
+                    initialStep={initialStep}
+                    onExit={this.handleTurnOffIntro}
+                    options={options}
+                />
                 <Navbar
                     color="white"
                     textColor="white"
@@ -166,35 +214,52 @@ class HomePage extends React.Component {
                     labels
                     color="main"
                 >
-                    <Link tabLink="#requests" onClick={() => this.chgTitle('Заявки')} tabLinkActive text="Заявки" iconMd="material:important_devices"/>
-                    <Link tabLink="#stores" onClick={() => this.chgTitle('Магазины')} text="Магазины" iconMd="material:store"/>
-                    <Link tabLink="#new" onClick={() => this.new_request(0)} text=" " >
+                    <Link
+                        tabLink="#requests"
+                        onClick={() => this.chgTitle('Мои заказы','requests')}
+                        tabLinkActive={current_tab === 'requests'}
+                        text="Мои заказы"
+                        iconMd="material:important_devices"
+                    />
+                    <Link tabLink="#stores"
+                          onClick={() => this.chgTitle('Магазины','stores')}
+                          tabLinkActive={current_tab === 'stores'}
+                          text="Магазины" iconMd="material:store"/>
+                    <Link tabLink="#new" onClick={() => this.new_request(0)}
+                          text=" " >
                         <Icon material="add"/>
                     </Link>
-                    <Link tabLink="#favorites" onClick={() => this.chgTitle('Избранное')} text="Избранное" iconMd="material:favorite"/>
-                    <Link tabLink="#person" onClick={() => this.chgTitle('Личный Кабинет')} text="Кабинет" iconMd="material:person"/>
+                    <Link tabLink="#favorites"
+                          onClick={() => this.chgTitle('Избранное','favorites')}
+                          tabLinkActive={current_tab === 'favorites'}
+                          text="Избранное" iconMd="material:favorite"/>
+                    <Link tabLink="#person"
+                          onClick={() => this.chgTitle('Личный Кабинет','person')}
+                          tabLinkActive={current_tab === 'person'}
+                          text="Кабинет" iconMd="material:person"/>
                 </Toolbar>
                 <Fab
                     href="open_request/0/"
                     position="center-bottom"
                     slot="fixed"
-                    color="blue"
+                    color="red"
+                    data-intro='Hello step one!'
                     className={"btn-new-request"}
                 >
                     <Icon ios="f7:add" md="material:add"/>
                 </Fab>
 
-                <Tabs animated>
-                    <Tab id="requests" className="page-content" tabActive>
+                <Tabs animated={loaded}>
+                    <Tab id="requests" className="page-content" tabActive={current_tab === 'requests'}>
                         <RequestsPage/>
                     </Tab>
-                    <Tab id="stores" className="page-content">
+                    <Tab id="stores" className="page-content" tabActive={current_tab === 'stores'}>
                         <StoresPage/>
                     </Tab>
-                    <Tab id="favorites" className="page-content">
+                    <Tab id="favorites" className="page-content" tabActive={current_tab === 'favorites'}>
                         <FavoritesPage/>
                     </Tab>
-                    <Tab id="person" className="page-content">
+                    <Tab id="person" className="page-content" tabActive={current_tab === 'person'}>
                         <SettingsPage/>
                     </Tab>
                 </Tabs>

@@ -14,6 +14,9 @@
     --f7-toolbar-link-color: #cb2128;
 
 }
+.statusbar {
+    background: #cb2128;
+}
 
 /*cb2128 */
 i.icon.marshal-icon {
@@ -151,8 +154,9 @@ DIV.store-header {
 }
 
 #stores .page {
-    padding-top: var(--f7-navbar-height);
+    top: 140px;
     padding-bottom: 60px;
+    height: calc(100vh - 140px);
 }
 
 #stores .page-content {
@@ -175,8 +179,8 @@ DIV.store-header {
     font-size: 10px;
 }
 i.icon.sub-title {
-    width: 16px;
-    height: 16px;
+    width: 32px;
+    height: 32px;
     margin-right: 1px;
 }
 i.icon.fav-icon {
@@ -191,6 +195,7 @@ i.icon.fav-icon {
 .car-brands {
     width: 50%;
     right: 0;
+    top: 0;
     text-align: right;
     font-weight: bold;
     position: absolute;
@@ -210,4 +215,24 @@ i.icon.fav-icon {
     top: 6px;
     left: 12px;
     position: relative;
+}
+
+.chip .input-dropdown select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    font-weight: bold;
+    padding: 16px 0;
+    text-align-last: center;
+}
+
+#stores .chip {
+    height: 46px;
+}
+
+.chip .input-dropdown::before, .chip .input-dropdown::after {
+    display: none !important;
+}
+.chip .input-dropdown select::-ms-expand {
+    display: none;
 }
