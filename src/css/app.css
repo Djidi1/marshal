@@ -179,8 +179,8 @@ DIV.store-header {
     font-size: 10px;
 }
 i.icon.sub-title {
-    width: 16px;
-    height: 16px;
+    width: 32px;
+    height: 32px;
     margin-right: 1px;
 }
 i.icon.fav-icon {
@@ -222,9 +222,14 @@ i.icon.fav-icon {
     -moz-appearance: none;
     appearance: none;
     font-weight: bold;
-    padding: 7px 0;
+    padding: 16px 0;
     text-align-last: center;
 }
+
+#stores .chip {
+    height: 46px;
+}
+
 .chip .input-dropdown::before, .chip .input-dropdown::after {
     display: none !important;
 }

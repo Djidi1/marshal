@@ -15,7 +15,7 @@ class SettingsPage extends React.Component {
         set('user', undefined).then();
         set('AUTH_TOKEN', undefined).then(() => {
             // restart page
-            document.location.href='/';
+            document.location.reload();
             //this.$f7.views.main.router.navigate('/');
         });
     }

@@ -2,6 +2,8 @@ import React from 'react';
 import { get, set } from 'idb-keyval';
 import {connect} from "react-redux";
 import { Offline, Detector } from "react-detect-offline";
+import 'intro.js/introjs.css';
+import { Steps } from 'intro.js-react';
 
 import {
     Page,
@@ -125,7 +127,8 @@ class HomePage extends React.Component {
         this.state = {
             title: "Мои заказы",
             current_tab: undefined,
-            loaded: false
+            loaded: false,
+            stepsEnabled: false,
         }
     }
 
@@ -138,8 +141,18 @@ class HomePage extends React.Component {
             && this.setState({current_tab})
             && this.$f7.tab.show(`#${current_tab}`,`#${current_tab}`);
         });
+        get('stepsEnabled').then(value => {
+            const stepsEnabled = value === undefined;
+            this.setState({stepsEnabled});
+        });
         this.$f7.dialog.close();
     }
+
+    handleTurnOffIntro = () => {
+        set('stepsEnabled', false).then(() => {
+            this.setState({stepsEnabled: false});
+        });
+    };
 
     new_request(reqId) {
         const app = this.$f7;
@@ -154,10 +167,35 @@ class HomePage extends React.Component {
         });
     };
 
+
     render() {
-        const { loaded, title, current_tab } = this.state;
+        const { loaded, title, current_tab, stepsEnabled } = this.state;
+        const steps = [
+            {
+                element: '.toolbar.tabbar',
+                intro: 'В нижней части экрана расположена навигация по приложению.',
+            },
+            {
+                element: '.btn-new-request',
+                intro: 'Нажмите эту кнопку для добавления нового запроса.',
+            },
+        ];
+        const options = {
+            nextLabel: 'Далее',
+            prevLabel: 'Назад',
+            skipLabel: 'Пропустить',
+            doneLabel: 'Завершить',
+        };
+        const initialStep = 0;
         return (
             <Page hideToolbarOnScroll pageContent={false}>
+                <Steps
+                    enabled={stepsEnabled}
+                    steps={steps}
+                    initialStep={initialStep}
+                    onExit={this.handleTurnOffIntro}
+                    options={options}
+                />
                 <Navbar
                     color="white"
                     textColor="white"
@@ -205,6 +243,7 @@ class HomePage extends React.Component {
                     position="center-bottom"
                     slot="fixed"
                     color="red"
+                    data-intro='Hello step one!'
                     className={"btn-new-request"}
                 >
                     <Icon ios="f7:add" md="material:add"/>
