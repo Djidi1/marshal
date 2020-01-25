@@ -125,8 +125,8 @@ class HomePage extends React.Component {
     constructor() {
         super();
         this.state = {
-            title: "Мои заказы",
-            current_tab: undefined,
+            title: 'Мои заказы',
+            current_tab: 'requests',
             loaded: false,
             stepsEnabled: false,
         }
