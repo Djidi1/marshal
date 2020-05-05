@@ -3,6 +3,7 @@ export const SHOPS_FAVORITE = 'SHOPS_FAVORITE';
 export const SHOPS_ADD_FAVORITE = 'SHOPS_ADD_FAVORITE';
 export const SHOPS_DELETE_FAVORITE = 'SHOPS_DELETE_FAVORITE';
 export const CATEGORIES_REQUEST = 'CATEGORIES_REQUEST';
+export const STATUSES_REQUEST = 'STATUSES_REQUEST';
 export const REQUESTS = 'REQUESTS';
 export const REQUEST = 'REQUEST';
 export const ADD_REQUEST = 'ADD_REQUEST';
@@ -52,6 +53,14 @@ export function handleCategories(payload) {
     return function(dispatch) {
         dispatch({
             type: CATEGORIES_REQUEST,
+            payload: payload,
+        })
+    }
+}
+export function handleStatuses(payload) {
+    return function(dispatch) {
+        dispatch({
+            type: STATUSES_REQUEST,
             payload: payload,
         })
     }

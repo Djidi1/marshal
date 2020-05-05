@@ -137,7 +137,7 @@ export default class extends React.Component {
                         onClick={() => {this.setState({sheetVisible: !this.state.sheetVisible})}}
                     />
                     <Link
-                        iconIos="f7:arrow_up_fill"
+                        iconIos="material:send"
                         iconMd="material:send"
                         slot="inner-end"
                         onClick={this.sendMessage.bind(this)}

@@ -4,25 +4,26 @@
   "private": true,
   "homepage": ".",
   "dependencies": {
-    "axios": "^0.18.1",
-    "browserslist": "^4.7.0",
-    "caniuse-lite": "^1.0.30000989",
-    "framework7": "^4.5.0",
+    "axios": "^0.19.2",
+    "browserslist": "^4.12.0",
+    "caniuse-lite": "^1.0.30001051",
+    "framework7": "^4.5.2",
     "framework7-icons": "^2.3.1",
-    "framework7-react": "^4.5.0",
+    "framework7-react": "^4.5.2",
     "idb-keyval": "^3.2.0",
     "intro.js": "^2.9.3",
     "intro.js-react": "^0.2.0",
     "lodash": "^4.17.15",
     "material-design-icons": "^3.0.1",
-    "react": "^16.9.0",
+    "node-sass": "^4.14.1",
+    "react": "^16.13.1",
     "react-detect-offline": "^2.4.0",
-    "react-dom": "^16.9.0",
-    "react-images-upload": "^1.2.7",
+    "react-dom": "^16.13.1",
+    "react-images-upload": "^1.2.8",
     "react-mobile-picker": "^0.1.12",
-    "react-redux": "^6.0.1",
-    "react-scripts": "^2.1.8",
-    "redux": "^4.0.4",
+    "react-redux": "^7.2.0",
+    "react-scripts": "^3.4.1",
+    "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0"
   },
@@ -38,8 +39,8 @@
   },
   "devDependencies": {
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "cpy-cli": "^2.0.0",
-    "gh-pages": "^2.1.1"
+    "cpy-cli": "^3.1.1",
+    "gh-pages": "^2.2.0"
   },
   "browserslist": {
     "development": [

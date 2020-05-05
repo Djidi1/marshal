@@ -1,0 +1,273 @@
+/* Your app styles here */
+* {
+  /*--f7-subnavbar-height: auto;*/
+  --f7-navbar-bg-color: #cb2128;
+  --f7-color-red: #cb2128;
+  --f7-color-red-rgb: 203, 33, 40;
+  --f7-color-red-shade: #c32128;
+  --f7-color-red-tint: #d32128;
+  --f7-theme-color-bg-color: #cb2128;
+  --f7-theme-color: #cb2128;
+  --f7-bars-link-color: #ffffff;
+  --f7-navbar-text-color: #ffffff;
+  --f7-message-footer-font-size: 10px;
+  --f7-toolbar-link-color: #cb2128;
+
+}
+
+h1 {
+  padding: 0 14px;
+}
+
+.statusbar {
+  background: #cb2128;
+}
+
+/*cb2128 */
+i.icon.marshal-icon {
+  background: url('../images/icon.svg');
+}
+
+.search-bar.subnavbar {
+  height: auto !important;
+}
+.stores-list .page-content {
+  padding-top: calc(var(--f7-navbar-height) + 52px) !important;
+}
+
+i.icon.status-icon {
+  vertical-align: bottom;
+  width: 24px;
+}
+
+.messages-title, .message {
+  margin-bottom: var(--f7-message-margin);
+}
+.messages {
+  min-height: auto !important;
+}
+
+.list-request, .list-request ul{
+  height: 100%;
+  width: 100%;
+}
+.list-with-header {
+  padding-top: 54px;
+}
+.list-title.list {
+  position: fixed;
+  top: var(--f7-navbar-height);
+  display: block;
+  z-index: 100;
+  width: 100vw;
+
+  &:before {
+    content: '';
+    position: absolute;
+    right: 0;
+    width: 100%;
+    top: 100%;
+    bottom: auto;
+    height: 8px;
+    pointer-events: none;
+    background: var(--f7-navbar-shadow-image);
+  }
+}
+
+.btn-new-request{
+  bottom: 8px !important;
+}
+.chip {
+  &.category-tag {
+    border: 1px solid var(--f7-color-red);
+    border-radius: 4px;
+    margin: 4px 8px;
+
+    .chip-media {
+      margin-left: -11px;
+    }
+
+    span.cat-icon-store {
+      flex: 1 1;
+      height: 24px;
+    }
+  }
+}
+
+span.cat-icon {
+  flex: 1;
+  svg {
+    flex: 1 1;
+    width: 40px;
+    margin-right: 8px;
+  }
+}
+.main-color {
+  color: var(--f7-color-red);
+}
+.bg-color-main {
+  background-color: var(--f7-color-red);
+}
+span.cat-icon svg .fil0, span.cat-icon-store svg .fil0 {
+  fill: var(--f7-color-red);
+}
+
+span.categories-list {
+  display: flex;
+  align-items: center;
+}
+.messagebar-sheet {
+  padding-bottom: 60px;
+}
+.fileContainer p {
+  display: none;
+}
+.errorsContainer {
+  position: absolute;
+  background: white;
+  border-radius: 5px;
+  padding: 0 4px;
+  opacity: 0.95;
+  box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.05);
+}
+.fileContainer {
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+
+  button.chooseFileButton {
+    height: 50px;
+    margin: 0;
+    border-radius: 0;
+    background-color: var(--f7-color-red);
+  }
+
+  button.chooseFileButton:hover {
+    background-color: var(--f7-color-red-tint);
+  }
+}
+
+.fileUploader {
+  position: absolute;
+  bottom: 0;
+}
+
+DIV.store-header {
+  background: #999999;
+  color: #fff;
+}
+
+.center {
+  text-align: center;
+}
+
+#stores {
+  .page {
+    top: 140px;
+    padding-bottom: 60px;
+    height: calc(100vh - 140px);
+  }
+  .page-content {
+    padding-top: 0;
+    padding-bottom: 60px;
+    height: calc(100vh - 160px);
+  }
+  .toolbar-top {
+    position: relative;
+    top: 0;
+
+    i.icon.category-icon {
+      width: 28px;
+      height: 28px;
+      margin-top: 6px;
+    }
+
+    span.tabbar-label {
+      padding-bottom: 6px;
+      font-size: 10px;
+    }
+  }
+
+  .chip {
+    height: 46px;
+  }
+}
+
+i.icon {
+  &.sub-title {
+    width: 32px;
+    height: 32px;
+    margin-right: 1px;
+  }
+  &.fav-icon {
+    top: -12px;
+    right: -12px;
+    position: absolute;
+    font-size: 16px;
+  }
+}
+
+.sheet-modal-inner .page-content {
+  overflow: hidden;
+}
+.car-brands {
+  width: 50%;
+  right: 0;
+  top: 0;
+  text-align: right;
+  font-weight: bold;
+  position: absolute;
+}
+.display-flex {
+  .chip, .display-flex span {
+    font-weight: bold;
+    flex: 1 1 0;
+    margin: 12px 3px;
+    text-align: center;
+  }
+  span.flex-direction-column {
+    margin-bottom: -20px;
+  }
+}
+
+.filter-title {
+  font-weight: bold;
+  top: 6px;
+  left: 12px;
+  position: relative;
+}
+
+.chip {
+  .input-dropdown select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    font-weight: bold;
+    padding: 16px 0;
+    text-align-last: center;
+  }
+  .item-input-wrap.input-dropdown {
+    margin: 0;
+  }
+  .input-dropdown::before, .chip .input-dropdown::after {
+    display: none !important;
+  }
+  .input-dropdown select::-ms-expand {
+    display: none;
+  }
+}
+
+
+.list {
+  &.with-border {
+    border: 1px solid #eee;
+  }
+  .item-inner .item-after {
+    font-size: 0.9rem;
+    color: #2196F3;
+  }
+  .item-title-row .item-after {
+    font-size: 0.7rem;
+  }
+}

@@ -29,9 +29,12 @@ export default function (props) {
     const f7params = {
         id: 'ru.bhapp.marshal', // App bundle ID
         name: 'marshal', // App name
-        theme: 'md', // Automatic theme detection
+        theme: 'ios', // Automatic theme detection
         // App routes
         routes,
+        view: {
+            animate : false,
+        },
     };
 
     return (

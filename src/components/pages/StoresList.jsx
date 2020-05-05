@@ -76,7 +76,7 @@ class ShopsList extends React.Component {
                         color="white"
                 >
                     <NavRight>
-                        <Link iconMd="material:done" onClick={() => this.setShops()}/>
+                        <Link iconIos="material:done" onClick={() => this.setShops()}/>
                     </NavRight>
                     <Subnavbar inner={false} className={"search-bar"}>
                         <Searchbar
