@@ -68,14 +68,17 @@ class RequestsPage extends React.Component {
 
   render() {
     const {requests, statuses} = this.props;
+    const colorsMap = ['orange', 'blue', 'pink', 'green', 'red']
+
     return (
       <>
         <Card
           content="Здесь находятся ваши заявки, заказы и уже сделанные покупки"
         />
         <List accordionList inset>
-          {statuses.map(status => (
+          {statuses.map((status, index) => (
             <ListItem
+              className={`list-item-request bg-${colorsMap[index]}`}
               key={`status_${status.id}`}
               accordionItem
               title={status.status}

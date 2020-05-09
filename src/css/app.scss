@@ -94,6 +94,25 @@ i.icon.status-icon {
   }
 }
 
+.list-item-request {
+  &.bg-green a {
+    background: #B2DFDB;
+  }
+  &.bg-red a {
+    background: #F44336;
+    color: #ffffff;
+  }
+  &.bg-blue a {
+    background: #bbdefb;
+  }
+  &.bg-orange a {
+    background: #ffe0b2;
+  }
+  &.bg-pink a {
+    background: #ce93d8;
+  }
+}
+
 span.cat-icon {
   flex: 1;
   svg {
