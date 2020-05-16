@@ -66,9 +66,8 @@ class StoresPage extends React.Component {
         const {category_id, brand_id} = this.state;
 
         const filtered_shops = shops.filter(x => {
-            return x.categories.find(y => y.id === category_id || category_id === 0)
-                && (x.car_brands.find(y => y.pivot.car_brand_id === brand_id)
-                    || brand_id === 0)
+            return (x.categories.find(y => y.id === category_id) || category_id === 0)
+                && (x.car_brands.find(y => y.pivot.car_brand_id === brand_id) || brand_id === 0)
         });
 
         return (

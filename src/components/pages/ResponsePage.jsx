@@ -259,7 +259,7 @@ class respMessages extends React.Component {
         return shop !== undefined ? shop.name : "-"
     }
     addToReserve = (answerId) => {
-        const {request, handleRequest} = this.props;
+        const {response, handleRequest} = this.props;
         const set_data = new setData();
         const get_data = new getData();
         if (answerId > 0) {
@@ -267,7 +267,7 @@ class respMessages extends React.Component {
             date.setDate(date.getDate() + 3);
             const payload = {reserve_date: date.toISOString().split('T')[0]};
             set_data.dataPut('answer-update/' + answerId, payload).then(async () => {
-                await get_data.data('request/' + request.id).then(value => value !== undefined && handleRequest(value));
+                await get_data.data('request/' + response.request_id).then(value => value !== undefined && handleRequest(value));
                 this.addFSSuccess.open();
             });
         }

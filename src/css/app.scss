@@ -35,9 +35,22 @@ i.icon.marshal-icon {
   padding-top: calc(var(--f7-navbar-height) + 52px) !important;
 }
 
-i.icon.status-icon {
-  vertical-align: bottom;
-  width: 24px;
+.item-title {
+  span {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+  i.icon.status-icon {
+    vertical-align: top;
+    font-size: 1.3rem;
+    margin-right: 4px;
+    width: 20px;
+  }
+}
+
+.sheet-modal-inner .page-content .list {
+  overflow: auto;
+  height: inherit;
 }
 
 .messages-title, .message {
@@ -210,6 +223,28 @@ DIV.store-header {
 
   .chip {
     height: 46px;
+    border-radius: 4px;
+    .item-label {
+      position: absolute;
+      font-size: 0.65rem;
+    }
+    .input-dropdown select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      font-weight: bold;
+      padding: 22px 0 8px;
+      text-align-last: center;
+    }
+    .item-input-wrap.input-dropdown {
+      margin: 0;
+    }
+    .input-dropdown::before, .chip .input-dropdown::after {
+      display: none !important;
+    }
+    .input-dropdown select::-ms-expand {
+      display: none;
+    }
   }
 }
 
@@ -234,8 +269,9 @@ i.icon {
   width: 50%;
   right: 0;
   top: 0;
+  color: #9C27B0;
   text-align: right;
-  font-weight: bold;
+  font-size: 0.65rem;
   position: absolute;
 }
 .display-flex {
@@ -257,26 +293,6 @@ i.icon {
   position: relative;
 }
 
-.chip {
-  .input-dropdown select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    font-weight: bold;
-    padding: 16px 0;
-    text-align-last: center;
-  }
-  .item-input-wrap.input-dropdown {
-    margin: 0;
-  }
-  .input-dropdown::before, .chip .input-dropdown::after {
-    display: none !important;
-  }
-  .input-dropdown select::-ms-expand {
-    display: none;
-  }
-}
-
 
 .list {
   &.with-border {
@@ -288,5 +304,19 @@ i.icon {
   }
   .item-title-row .item-after {
     font-size: 0.7rem;
+  }
+}
+
+.legend.row {
+  font-size: 0.75rem;
+  background: #EEEEEE;
+  padding: 0.3rem 0 0.2rem;
+  margin: 0.2rem;
+  border-radius: 0.3rem;
+  i {
+    font-size: 1rem;
+  }
+  .col {
+    text-align: center;
   }
 }

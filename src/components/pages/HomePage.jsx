@@ -35,6 +35,7 @@ import {
   handleCarBrands,
   handleCarModels,
   handleStatuses,
+  handleAnswers,
 } from "../../actions/DataActions";
 
 // Load data from indexedDB to Store
@@ -87,7 +88,7 @@ class initApplication {
         }
       });
     } else {
-      await this.getDataFromLS();
+      await this.getDataFromLS(props);
     }
   };
   getDataFromDB = async (props) => {
@@ -96,13 +97,14 @@ class initApplication {
     const favorite_shops = get_data.data('favorite-shops').then(value => value !== undefined && props.handleFavoriteShops(value.result));
     const categories = get_data.data('categories').then(value => value !== undefined && props.handleCategories(value));
     const userRequests = get_data.data('userRequests').then(value => value !== undefined && props.handleRequests(value));
+    const answers = get_data.data('answers').then(value => value !== undefined && props.handleAnswers(value));
     const cars = get_data.data('cars').then(value => value !== undefined && props.handleCars(value));
     const carBrands = get_data.data('carbrands').then(value => value !== undefined && props.handleCarBrands(value));
     const carModels = get_data.data('carmodels').then(value => value !== undefined && props.handleCarModels(value));
     const requestStatuses = get_data.data('request-statuses').then(value => value !== undefined && props.handleStatuses(value));
 
     // wait all requests
-    await Promise.all([shops, favorite_shops, categories,userRequests,cars,carBrands,carModels,requestStatuses]).then(() => {
+    await Promise.all([shops,favorite_shops,categories,answers,userRequests,cars,carBrands,carModels,requestStatuses]).then(() => {
       console.log('loaded from DB');
     });
   };
@@ -110,6 +112,7 @@ class initApplication {
     const shops = get('shops').then(value => value !== undefined && props.handleShops(value));
     const favorite_shops = get('favorite-shops').then(value => value !== undefined && props.handleFavoriteShops(value.result));
     const categories = get('categories').then(value => value !== undefined && props.handleCategories(value));
+    const answers = get('answers').then(value => value !== undefined && props.handleAnswers(value));
     const userRequests = get('userRequests').then(value => value !== undefined && props.handleRequests(value));
     const cars = get('cars').then(value => value !== undefined && props.handleCars(value));
     const carBrands = get('carbrands').then(value => value !== undefined && props.handleCarBrands(value));
@@ -117,7 +120,7 @@ class initApplication {
     const requestStatuses = get('request-statuses').then(value => value !== undefined && props.handleStatuses(value));
 
     // wait all requests
-    await Promise.all([shops, favorite_shops, categories,userRequests,cars,carBrands,carModels,requestStatuses]).then(() => {
+    await Promise.all([shops,favorite_shops,categories,answers,userRequests,cars,carBrands,carModels,requestStatuses]).then(() => {
       console.log('loaded from LS');
     });
   }
@@ -254,7 +257,7 @@ class HomePage extends React.Component {
 
         <Tabs animated={loaded}>
           <Tab id="requests" className="page-content" tabActive={current_tab === 'requests'}>
-            <RequestsPage/>
+            <RequestsPage f7={this.$f7}/>
           </Tab>
           <Tab id="stores" className="page-content" tabActive={current_tab === 'stores'}>
             <StoresPage/>
@@ -288,6 +291,7 @@ const mapDispatchToProps = dispatch => {
     handleCarBrands: brands => dispatch(handleCarBrands(brands)),
     handleCarModels: models => dispatch(handleCarModels(models)),
     handleStatuses: statuses => dispatch(handleStatuses(statuses)),
+    handleAnswers: statuses => dispatch(handleAnswers(statuses)),
   }
 };
 

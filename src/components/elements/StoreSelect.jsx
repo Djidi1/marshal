@@ -23,6 +23,11 @@ export default class StoreSelect extends Component {
                 carBrand: 'teal',
                 category: 'blue'
             },
+            labelsGroups: {
+                type: 'Магазин/СТО',
+                carBrand: 'Марка авто',
+                category: 'Категория'
+            },
         };
     }
 
@@ -69,7 +74,7 @@ export default class StoreSelect extends Component {
     };
 
     render() {
-        const {optionGroups, valueGroups, colorsGroups} = this.state;
+        const {optionGroups, valueGroups, colorsGroups, labelsGroups} = this.state;
 
         return (
             <>
@@ -82,6 +87,7 @@ export default class StoreSelect extends Component {
                                 key={`group_${type}`}
                                 className={`chip flex-direction-column color-${colorsGroups[type]}`}
                                 type="select"
+                                label={labelsGroups[type]}
                                 placeholder="Выберите..."
                                 value={valueGroups[type]}
                                 onChange={(event) => this.handleChange(type, event.target.value)}
