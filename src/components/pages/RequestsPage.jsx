@@ -5,10 +5,11 @@ import {
   ListItem,
   Block,
   Card,
-  AccordionContent, Icon,
+  AccordionContent, Icon, Page,
 } from 'framework7-react';
 import Response from "./components/response";
 import RequestListItem from "./components/requestItem";
+import {initApplication} from "./HomePage";
 
 const Legend = () => (
   <div className="legend row">
@@ -25,11 +26,20 @@ const RequestsPage = (props) => {
     statuses,
     answers,
     f7,
+    ...parentProps
   } = props;
   const colorsMap = ['orange', 'blue', 'pink', 'green', 'red']
 
+  const handleRefreshData = async (e) => {
+    f7.dialog.preloader('Пожалуйста подождите...');
+    const initApp = new initApplication();
+    await initApp.init(parentProps);
+    f7.dialog.close();
+    e.detail();
+  }
+
   return (
-    <>
+    <Page ptr onPtrRefresh={handleRefreshData}>
       <Card
         content="Здесь находятся ваши заявки, заказы и уже сделанные покупки"
       />
@@ -151,7 +161,7 @@ const RequestsPage = (props) => {
           </AccordionContent>
         </ListItem>
       </List>
-    </>
+    </Page>
   );
 }
 

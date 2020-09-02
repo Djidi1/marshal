@@ -39,7 +39,7 @@ import {
 } from "../../actions/DataActions";
 
 // Load data from indexedDB to Store
-class initApplication {
+export class initApplication {
   init = async (props) => {
     await get('user').then(value => value !== undefined && props.handleLogin(value));
     // from internet
@@ -257,7 +257,7 @@ class HomePage extends React.Component {
 
         <Tabs animated={loaded}>
           <Tab id="requests" className="page-content" tabActive={current_tab === 'requests'}>
-            <RequestsPage f7={this.$f7}/>
+            <RequestsPage f7={this.$f7} {...this.props}/>
           </Tab>
           <Tab id="stores" className="page-content" tabActive={current_tab === 'stores'}>
             <StoresPage/>

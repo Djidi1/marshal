@@ -267,7 +267,9 @@ i.icon {
 }
 .car-brands {
   width: 50%;
-  right: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  right: 16px;
   top: 0;
   color: #9C27B0;
   text-align: right;

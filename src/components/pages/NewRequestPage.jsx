@@ -145,11 +145,14 @@ class NewRequestPage extends Component {
                     <ListInput
                         label="Автомобиль"
                         type="select"
-                        placeholder="Выберите..."
+                        info={cars.length === 0 ? "Для возможности выбора автомобиля добавьте его через Личный кабинет" : "Выберите из списка"}
                         value={car_id}
                         onChange={(event) => this.handleCarData( event.target.value)}
+                        disabled={cars.length === 0}
                     >
-                        <option key={0} value={null}>Выберите...</option>
+                        <option key={0} value={null}>
+                            {cars.length === 0 ? "Нет автомобилей в ЛК" : "Выберите..."}
+                        </option>
                         {
                             cars.map(car => (
                                 <option
