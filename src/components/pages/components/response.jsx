@@ -68,7 +68,6 @@ const Response = (props) => {
       swipeout
       onClick={() => open_response(item.id)}
       subtitle={get_shop(item.shop_id)}
-      text={item.description}
     >
       {/*after={item.created_at.toLocaleString()}*/}
       <span slot="after">
@@ -82,11 +81,12 @@ const Response = (props) => {
       <b slot="title">
         {item.price} ₽
       </b>
-      <span className="car-brands" slot="text">
+      <div className="goods-description" slot="text">
           {item.reserve_date
-            ? `В резерве до ${item.reserve_date.toLocaleString().slice(0,10)}`
+            ? <span className="reserve">В резерве до {item.reserve_date.toLocaleString().slice(0,10)}</span>
             : null}
-      </span>
+          {item.description}
+      </div>
       {!item.reserve_date
         ? <SwipeoutActions right>
           <SwipeoutButton close color="orange" onClick={() => addToReserve(item.id)}>

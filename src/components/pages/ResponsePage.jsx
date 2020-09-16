@@ -264,7 +264,7 @@ class respMessages extends React.Component {
         const get_data = new getData();
         if (answerId > 0) {
             const date = new Date();
-            date.setDate(date.getDate() + 3);
+            date.setDate(date.getDate() + 2);
             const payload = {reserve_date: date.toISOString().split('T')[0]};
             set_data.dataPut('answer-update/' + answerId, payload).then(async () => {
                 await get_data.data('request/' + response.request_id).then(value => value !== undefined && handleRequest(value));
@@ -276,7 +276,7 @@ class respMessages extends React.Component {
     addFSSuccess = this.$f7.notification.create({
         icon: '<i class="icon marshal-icon"> </i>',
         title: 'Маршал Сервис',
-        subtitle: 'Заказ добавлен в резерв на 3 дня',
+        subtitle: 'Заказ добавлен в резерв на 48 часов',
         closeTimeout: 3000,
     });
     updateMessages() {
