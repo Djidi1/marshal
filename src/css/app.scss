@@ -219,6 +219,19 @@ i.icon {
   font-weight: bold;
   position: absolute;
 }
+.reserve {
+  float: right;
+  margin-left: 8px;
+  color: #9C27B0;
+  text-align: right;
+  font-size: 0.65rem;
+}
+.goods-description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
 .display-flex {
   .chip, .display-flex span {
     font-weight: bold;

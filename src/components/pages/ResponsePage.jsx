@@ -17,13 +17,14 @@ import {
     ListItem,
     Navbar,
     Subnavbar,
+    Button,
     // NavRight
 } from 'framework7-react';
 import {Detector} from "react-detect-offline";
 import {getData} from "../../axios/getData";
 import {setData} from "../../axios/setData";
 import {get} from "idb-keyval";
-import {handleResponse} from "../../actions/DataActions";
+import {handleRequest, handleResponse} from "../../actions/DataActions";
 
 const _ = require('lodash/core');
 
@@ -110,7 +111,17 @@ class respMessages extends React.Component {
                     bgColor="main"
                     title="Предложение"
                     backLink="Back"
+
                 >
+                    <Button
+                        className="margin-horizontal-half"
+                        slot="right"
+                        fill
+                        color="orange"
+                        onClick={() => this.addToReserve(response.id)}
+                    >
+                        В резерв
+                    </Button>
                     <Subnavbar
                         inner={false}
                         className={"no-margin"}>
@@ -120,17 +131,19 @@ class respMessages extends React.Component {
                         >
                             <ListItem
                                 key={response.id}
-                                onClick={() => this.open_response(response.id)}
                                 after={response.created_at.toLocaleString()}
                                 subtitle={this.get_shop(response.shop_id)}
-                                text={response.description}
                             >
                                 <b slot="title">
-                                    {
-                                        response.is_new ? <Icon className={"status-icon"} material="fiber_new"
-                                                                color="green"/> : null
+                                    {response.is_new
+                                        ? <Icon className={"status-icon"} material="fiber_new" color="green"/>
+                                        : null
                                     }
-                                    {response.price}</b>
+                                    {response.price}
+                                </b>
+                                <span slot="text">
+                                    {response.description}
+                                </span>
                             </ListItem>
                         </List>
                     </Subnavbar>
@@ -243,8 +256,29 @@ class respMessages extends React.Component {
     }
     get_shop(shop_id) {
         const shop = this.props.shops.find(x => x.id === shop_id);
-        return shop !== undefined ? shop.name : "Без категории"
+        return shop !== undefined ? shop.name : "-"
     }
+    addToReserve = (answerId) => {
+        const {response, handleRequest} = this.props;
+        const set_data = new setData();
+        const get_data = new getData();
+        if (answerId > 0) {
+            const date = new Date();
+            date.setDate(date.getDate() + 2);
+            const payload = {reserve_date: date.toISOString().split('T')[0]};
+            set_data.dataPut('answer-update/' + answerId, payload).then(async () => {
+                await get_data.data('request/' + response.request_id).then(value => value !== undefined && handleRequest(value));
+                this.addFSSuccess.open();
+            });
+        }
+        return true;
+    };
+    addFSSuccess = this.$f7.notification.create({
+        icon: '<i class="icon marshal-icon"> </i>',
+        title: 'Маршал Сервис',
+        subtitle: 'Заказ добавлен в резерв на 48 часов',
+        closeTimeout: 3000,
+    });
     updateMessages() {
         const self = this;
         const messages = self.props.response.messages;
@@ -403,6 +437,7 @@ class respMessages extends React.Component {
 
 const mapStateToProps = store => {
     return {
+        request: store.request[0],
         response: store.response[0],
         shops: store.stores.shops,
         user: store.user,
@@ -411,6 +446,7 @@ const mapStateToProps = store => {
 
 const mapDispatchToProps = dispatch => {
     return {
+        handleRequest: request => dispatch(handleRequest(request)),
         handleResponse: request => dispatch(handleResponse(request)),
     }
 };
