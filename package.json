@@ -29,8 +29,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build-ios": "react-scripts build && rm -R ../marshal_app/www/* && cp -R build/* ../marshal_app/www/ && cd ../marshal_app && cordova build ios",
-    "build-android": "react-scripts build && rm -R ../marshal_app/www/* && cp -R build/* ../marshal_app/www/ && cd ../marshal_app && cordova build android --release -- --keystore=./key/android.keystore --storePassword=12063607 --alias=android-app-key --password=12063607",
+    "build": "react-scripts build && rm -R ../marshal_app/www/* && cp -R build/* ../marshal_app/www/ && cd ../marshal_app && cordova build ios",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "copy-fonts": "cpy node_modules/framework7-icons/fonts/*.* src/fonts && cpy node_modules/material-design-icons/iconfont/*.{eot,ttf,woff,woff2} src/fonts",
