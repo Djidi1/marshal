@@ -9,7 +9,7 @@ import StoreItem from "../elements/StoreItem";
 class FavoritesPage extends React.Component {
     render() {
         const {favorite_shops, shops} = this.props;
-        const fav_shops = shops.filter(x => favorite_shops.find(y => y.id === x.id));
+        const fav_shops = favorite_shops ? shops.filter(x => favorite_shops.find(y => y.id === x.id)) : [];
         return (
             <>
                 <h1>Избранное</h1>

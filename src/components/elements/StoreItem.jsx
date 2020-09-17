@@ -83,7 +83,7 @@ class StoreItem extends React.PureComponent {
                     {item.name}
                 </strong>
                 <span slot="subtitle">
-                    {item.categories.map(cat => {
+                    {item.categories && item.categories.map(cat => {
                         return <Icon
                             key={`${item.id}_${cat.id}`}
                             icon='sub-title category-icon'
@@ -94,7 +94,7 @@ class StoreItem extends React.PureComponent {
                 <span slot="text">
                     {item.address}
                     <span className="car-brands">
-                        {item.car_brands.length > 0
+                        {item.car_brands && item.car_brands.length > 0
                             ? item.car_brands.map(item => item.car_brand).join(', ')
                             : 'Все марки'
                         }

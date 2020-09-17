@@ -33,7 +33,8 @@ class StorePage extends React.Component {
 
   componentDidMount() {
     const store_id = Number(this.$f7route.params.storeId);
-    const {shops, favorite_shops} = this.props;
+    const shops = this.props.shops || [];
+    const favorite_shops = this.props.favorite_shops || [];
     const store = shops.find(shop => shop.id === store_id);
     const in_favorite = !!favorite_shops.find(x => x.id === store.id);
     this.setState({store, in_favorite});

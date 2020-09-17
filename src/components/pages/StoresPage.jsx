@@ -74,13 +74,16 @@ class StoresPage extends React.Component {
     };
 
     render() {
-        const {shops, favorite_shops, categories, carbrands} = this.props;
+        const favorite_shops = this.props.favorite_shops || []
+        const shops = this.props.shops || []
+        const categories = this.props.categories || []
+        const carbrands = this.props.carbrands || []
         const {category_id, brand_id} = this.state;
 
         const filtered_shops = shops.filter(x => {
-            return x.categories.find(y => y.id === category_id)
-                && (x.car_brands.find(y => y.pivot.car_brand_id === brand_id)
-                    || x.car_brands.length === 0)
+            return x.categories ? x.categories.find(y => y.id === category_id || category_id === 'Все')
+                && ((x.car_brands.find(y => y.pivot.car_brand_id === brand_id || brand_id === 'Все'))
+                    || x.car_brands.length === 0) : true
         });
 
         return (

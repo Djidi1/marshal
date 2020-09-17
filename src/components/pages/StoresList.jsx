@@ -11,6 +11,7 @@ import {
     Link,
     NavRight
 } from 'framework7-react';
+import {handleShops} from "../../actions/DataActions";
 
 class ShopsList extends React.Component {
     constructor(props) {
@@ -57,10 +58,12 @@ class ShopsList extends React.Component {
 
     componentDidMount() {
         const {shops, selected_shops} = this.props;
-        this.setState({selectedShops: [...selected_shops]});
-        shops.forEach((item) => {
-            item.checked = [...selected_shops].indexOf(item.id) !== -1;
-        })
+        if (selected_shops) {
+            this.setState({selectedShops: [...selected_shops]});
+            shops.forEach((item) => {
+                item.checked = [...selected_shops].indexOf(item.id) !== -1;
+            })
+        }
     }
 
     render() {
@@ -132,5 +135,10 @@ const mapStateToProps = store => {
         shops: store.stores.shops,
     }
 };
+const mapDispatchToProps = dispatch => {
+    return {
+        handleShops: shops => dispatch(handleShops(shops)),
+    }
+}
 
-export default connect(mapStateToProps)(ShopsList)
+export default connect(mapStateToProps, mapDispatchToProps)(ShopsList)
