@@ -6,6 +6,7 @@ export const CATEGORIES_REQUEST = 'CATEGORIES_REQUEST';
 export const STATUSES_REQUEST = 'STATUSES_REQUEST';
 export const REQUESTS = 'REQUESTS';
 export const REQUEST = 'REQUEST';
+export const ANSWERS = 'ANSWERS';
 export const ADD_REQUEST = 'ADD_REQUEST';
 export const UPDATE_REQUEST = 'UPDATE_REQUEST';
 export const DELETE_REQUEST = 'DELETE_REQUEST';
@@ -61,6 +62,14 @@ export function handleStatuses(payload) {
     return function(dispatch) {
         dispatch({
             type: STATUSES_REQUEST,
+            payload: payload,
+        })
+    }
+}
+export function handleAnswers(payload) {
+    return function(dispatch) {
+        dispatch({
+            type: ANSWERS,
             payload: payload,
         })
     }

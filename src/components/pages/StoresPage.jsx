@@ -15,20 +15,8 @@ class StoresPage extends React.Component {
     constructor() {
         super();
         this.state = {
-            category_id: 1,
-            brand_id: 1,
-        }
-    }
-
-    componentDidUpdate(prevProps) {
-        const {categories, carbrands} = this.props;
-        if (this.props.carbrands !== prevProps.carbrands) {
-            if (categories[0] && carbrands[0]) {
-                this.setState({
-                    category_id: categories[0].id,
-                    brand_id: carbrands[0].id
-                });
-            }
+            category_id: 0,
+            brand_id: 0,
         }
     }
 
@@ -74,42 +62,40 @@ class StoresPage extends React.Component {
     };
 
     render() {
-        const favorite_shops = this.props.favorite_shops || []
-        const shops = this.props.shops || []
-        const categories = this.props.categories || []
-        const carbrands = this.props.carbrands || []
+        const {shops, favorite_shops, categories, carbrands} = this.props;
         const {category_id, brand_id} = this.state;
 
         const filtered_shops = shops.filter(x => {
-            return x.categories ? x.categories.find(y => y.id === category_id || category_id === 'Все')
-                && ((x.car_brands.find(y => y.pivot.car_brand_id === brand_id || brand_id === 'Все'))
-                    || x.car_brands.length === 0) : true
+            return (x.categories.find(y => y.id === category_id) || category_id === 0)
+                && (x.car_brands.find(y => y.pivot.car_brand_id === brand_id) || brand_id === 0)
         });
 
         return (
-            <Page pageContent={true}>
+            <>
                 <StoreSelect
                     carbrands={carbrands}
                     handleBrand={this.handleBrand}
                     categories={categories}
                     handleCategory={this.handleCategory}
                 />
-                <List
-                    mediaList
-                    className={"no-margin"}
-                >
-                    <ul>
-                        {
-                            (filtered_shops.length)
-                                ? filtered_shops.map(item => {
-                                    const in_favorite = !!favorite_shops.find(x => x.id === item.id);
-                                    return <StoreItem in_favorite={in_favorite} key={item.id} item={item}/>
-                                })
-                                : <BlockTitle>Подходящие магазины не найдены</BlockTitle>
-                        }
-                    </ul>
-                </List>
-            </Page>
+                <Page pageContent>
+                    <List
+                        mediaList
+                        className={"no-margin"}
+                    >
+                        <ul>
+                            {
+                                (filtered_shops.length)
+                                    ? filtered_shops.map(item => {
+                                        const in_favorite = !!favorite_shops.find(x => x.id === item.id);
+                                        return <StoreItem in_favorite={in_favorite} key={item.id} item={item}/>
+                                    })
+                                    : <BlockTitle>Подходящие магазины не найдены</BlockTitle>
+                            }
+                        </ul>
+                    </List>
+                </Page>
+            </>
         );
     }
 }

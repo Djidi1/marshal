@@ -9,6 +9,7 @@ import { carBrandsReducer } from './carbrands'
 import { responseReducer } from './response'
 import { stoReducer } from './sto'
 import { statusesReducer } from './statuses'
+import { answersReducer } from './answers'
 
 export const rootReducer = combineReducers({
     user: userReducer,
@@ -21,4 +22,5 @@ export const rootReducer = combineReducers({
     carbrands: carBrandsReducer,
     carmodels: carModelsReducer,
     statuses: statusesReducer,
+    answers: answersReducer,
 });

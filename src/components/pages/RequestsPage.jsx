@@ -1,149 +1,177 @@
 import React from 'react';
 import {connect} from "react-redux";
-import {getData} from "../../axios/getData";
-import {setData} from "../../axios/setData";
-import {handleRequest, handleDeleteRequest} from "../../actions/DataActions";
-
-import {Detector} from "react-detect-offline";
-import {get} from "idb-keyval";
 import {
   List,
   ListItem,
-  SwipeoutActions,
-  SwipeoutButton,
-  Icon,
   Block,
   Card,
-  AccordionContent,
+  AccordionContent, Icon, Page,
 } from 'framework7-react';
+import Response from "./components/response";
+import RequestListItem from "./components/requestItem";
+import {initApplication} from "./HomePage";
 
-const getRequest = async (props, reqId) => {
-  let detect = new Detector();
-  if (await detect.state.online) {
-    let get_data = new getData();
-    await get_data.data('request/' + reqId).then(value => value !== undefined && props.handleRequest(value));
-  } else {
-    await get('request/' + reqId).then(value => value !== undefined && props.handleRequest(value));
-  }
-};
+const Legend = () => (
+  <div className="legend row">
+    <div className="col"><Icon className={"status-icon"} material="check_circle" color="green"/> - В наличии</div>
+    <div className="col"><Icon className={"status-icon"} material="copyright" color="blue"/> - Оригинал</div>
+    <div className="col"><Icon className={"status-icon"} material="event" color="orange"/> - Резерв</div>
+  </div>
+);
 
-class RequestsPage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
 
-  deleteRequest = (req_id) => {
-    const set_data = new setData();
-    if (req_id > 0) {
-      set_data.dataDelete('request-delete/' + req_id).then(() => {
-        this.props.handleDeleteRequest(req_id);
-      });
-    }
-  };
+const RequestsPage = (props) => {
+  const {
+    requests,
+    statuses,
+    answers,
+    f7,
+    ...parentProps
+  } = props;
+  const colorsMap = ['orange', 'blue', 'pink', 'green', 'red']
 
-  deleteHandle(req_id) {
-    const app = this.$f7;
-    app.dialog.confirm('Эта операция необратима', 'Удалить заявку?', () => this.deleteRequest(req_id), () => {
-    });
-  }
-
-  edit_request(reqId) {
-    const app = this.$f7;
-    app.views.main.router.navigate('open_request/' + reqId + '/');
+  const handleRefreshData = async (e) => {
+    f7.dialog.preloader('Пожалуйста подождите...');
+    const initApp = new initApplication();
+    await initApp.init(parentProps);
+    f7.dialog.close();
+    e.detail();
   }
 
-  open_request(reqId) {
-    this.$f7.dialog.preloader('Получаем предложения...');
-    getRequest(this.props, reqId).then(() => {
-      this.$f7.views.main.router.navigate('requests/' + reqId + '/', { animate: false });
-      this.$f7.dialog.close();
-    });
-  }
-
-  get_category(cat_id) {
-    const cat = this.props.categories.find(x => x.id === cat_id);
-    return cat !== undefined ? cat.category : "Без категории"
-  }
-
-  render() {
-    const {requests, statuses} = this.props;
-    return (
-      <>
-        <Card
-          content="Здесь находятся ваши заявки, заказы и уже сделанные покупки"
-        />
-        <List accordionList inset>
-          {statuses.map(status => (
-            <ListItem
-              key={`status_${status.id}`}
-              accordionItem
-              title={status.status}
-              after={requests.filter(x => x.status_id === status.id).length || '0'}
+  return (
+    <Page ptr onPtrRefresh={handleRefreshData}>
+      <Card
+        content="Здесь находятся ваши заявки, заказы и уже сделанные покупки"
+      />
+      <List accordionList inset>
+        <ListItem
+          className={`list-item-request`}
+          accordionItem
+          title="Общие запросы"
+          after={requests.filter(x => x.shop_id === null).length || '0'}
+        >
+          <AccordionContent>
+            <List
+              mediaList
+              className="with-border"
             >
-              <AccordionContent>
-                <List
-                  mediaList
-                  className="with-border"
+              <ul>
+              {
+                requests.filter(x => x.shop_id === null).length === 0
+                  ? <Block>-</Block>
+                  : requests.filter(x => x.shop_id === null).map(item => (
+                    <RequestListItem
+                      key={item.id}
+                      item={item}
+                      f7={f7}
+                    />
+                  ))
+              }
+              </ul>
+            </List>
+          </AccordionContent>
+        </ListItem>
+        <ListItem
+          className={`list-item-request`}
+          accordionItem
+          title="Личный чат"
+          after={answers.filter(x => x.reserve_date === null).length || '0'}
+        >
+          <AccordionContent>
+            <List
+              mediaList
+              className="with-border"
+            >
+              <Legend />
+              <ul>
+              {answers.filter(x => x.reserve_date === null).map(item =>
+                <Response
+                  key={item.id}
+                  item={item}
+                  f7={f7}
+                />
+              )}
+              </ul>
+            </List>
+          </AccordionContent>
+        </ListItem>
+        <ListItem
+          className={`list-item-request`}
+          accordionItem
+          title="Резерв"
+          after={answers.filter(x => x.reserve_date !== null).length || '0'}
+        >
+          <AccordionContent>
+            <List
+              mediaList
+              className="with-border"
+            >
+              <Legend />
+              <ul>
+                {answers.filter(x => x.reserve_date !== null).map(item =>
+                  <Response
+                    key={item.id}
+                    item={item}
+                    f7={f7}
+                  />
+                )}
+              </ul>
+            </List>
+          </AccordionContent>
+        </ListItem>
+        <ListItem
+          className={`list-item-request`}
+          accordionItem
+          title="Мои заявки"
+          after={requests.filter(x => x.shop_id === null).length || '0'}
+        >
+          <AccordionContent>
+            <List accordionList inset>
+              {statuses.map((status, index) => (
+                <ListItem
+                  className={`list-item-request bg-${colorsMap[index]}`}
+                  key={`status_${status.id}`}
+                  accordionItem
+                  title={status.status}
+                  after={requests.filter(x => x.status_id === status.id).length || '0'}
                 >
-                  {
-                    requests.filter(x => x.status_id === status.id).length === 0
-                      ? <Block>-</Block>
-                      : requests.map(item => (
-                        <ListItem
-                          key={item.id}
-                          swipeout
-                          onClick={() => this.open_request(item.id)}
-                          after={item.created_at.toLocaleString()}
-                          subtitle={"Предложений: " + (item.answers_count) + ""}
-                          text={item.text}
-                          className={'ripple'}
-                        >
-                          <span slot="title">
-                            <Icon
-                              className={"status-icon"}
-                              material={item.answers > 0 ? 'check_circle_outline' : 'access_time'}
-                              color="blue"
-                            />
-                            {this.get_category(item.category_id)}
-                          </span>
-                          <SwipeoutActions left>
-                            <SwipeoutButton close color="blue" onClick={() => this.edit_request(item.id)}>
-                              <Icon material="edit"/> Редактировать
-                            </SwipeoutButton>
-                          </SwipeoutActions>
-                          <SwipeoutActions right>
-                            <SwipeoutButton close color="#cb2128" onClick={() => this.deleteHandle(item.id)}>
-                              <Icon material="delete"/> Удалить
-                            </SwipeoutButton>
-                          </SwipeoutActions>
-                        </ListItem>
-                      ))
-                  }
-                </List>
-              </AccordionContent>
-            </ListItem>
-          ))}
-        </List>
-      </>
-    );
-  }
+                  <AccordionContent>
+                    <List
+                      mediaList
+                      className="with-border"
+                    >
+                      <ul>
+                        {
+                          requests.filter(x => x.status_id === status.id).length === 0
+                            ? <Block>-</Block>
+                            : requests.filter(x => x.status_id === status.id).map(item => (
+                              <RequestListItem
+                                key={item.id}
+                                item={item}
+                                f7={f7}
+                              />
+                            ))
+                        }
+                      </ul>
+                    </List>
+                  </AccordionContent>
+                </ListItem>
+              ))}
+            </List>
+          </AccordionContent>
+        </ListItem>
+      </List>
+    </Page>
+  );
 }
 
 
-const mapStateToProps = store => {
+const mapStateToProps = ({requests, statuses, answers}) => {
   return {
-    requests: store.requests,
-    categories: store.stores.categories,
-    statuses: store.statuses,
+    requests,
+    statuses,
+    answers,
   }
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    handleRequest: request => dispatch(handleRequest(request)),
-    handleDeleteRequest: data => dispatch(handleDeleteRequest(data)),
-  }
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(RequestsPage)
+export default connect(mapStateToProps, null)(RequestsPage)

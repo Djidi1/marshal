@@ -1,9 +1,9 @@
 import React from 'react';
-import {get, set} from 'idb-keyval';
+import { get, set } from 'idb-keyval';
 import {connect} from "react-redux";
-import {Offline, Detector} from "react-detect-offline";
+import { Offline, Detector } from "react-detect-offline";
 import 'intro.js/introjs.css';
-import {Steps} from 'intro.js-react';
+import { Steps } from 'intro.js-react';
 
 import {
   Page,
@@ -35,10 +35,11 @@ import {
   handleCarBrands,
   handleCarModels,
   handleStatuses,
+  handleAnswers,
 } from "../../actions/DataActions";
 
 // Load data from indexedDB to Store
-class initApplication {
+export class initApplication {
   init = async (props) => {
     await get('user').then(value => value !== undefined && props.handleLogin(value));
     // from internet
@@ -46,7 +47,7 @@ class initApplication {
     if (detect.state.online) {
       let get_data = new getData();
       let set_data = new setData();
-      await get_data.data('details').then(async value => {
+      await get_data.data('details').then( async value => {
         // if unregistered - register him
         if (value === 401) {
           // 1. create unique user
@@ -60,36 +61,34 @@ class initApplication {
             c_password: password,
             initial: true
           };
-          await set_data.data('register', payload).then(async () => {
-            // clear AUTH_TOKEN before register new
-            set('AUTH_TOKEN', undefined).then(async () => {
-              // auth user
-              const auth = new authorisation();
-              await auth.login(login, password).then(async response => {
-                console.log('response', response);
-                // записываем токен
-                const user = response.data.success;
+          await set_data.data('register', payload).then(async data => {
+            console.log(data);
+            // auth user
+            const auth = new authorisation();
+            await auth.login(login, password).then( async response => {
+              // записываем токен
+              const user = response.data.success;
+              await props.handleLogin(user);
+              // переименовываем
+              const id_user = response.data.success.id;
+              const new_name = {name: `User_${id_user}`, email: `user_${id_user}@marshal-service.ru`};
+              await set_data.dataPut(`user-update/${id_user}`, new_name).then( async () => {
+                // обновляем стор
+                user.name = new_name.name;
+                user.email = new_name.email;
                 await props.handleLogin(user);
-                // переименовываем
-                const id_user = response.data.success.id;
-                const new_name = {name: `User_${id_user}`, email: `user_${id_user}@marshal-service.ru`};
-                await set_data.dataPut(`user-update/${id_user}`, new_name).then(async () => {
-                  // обновляем стор
-                  user.name = new_name.name;
-                  user.email = new_name.email;
-                  await props.handleLogin(user);
-                });
-                // get data
-                await this.getDataFromDB(props);
-              })
+              });
+              // get data
+              await this.getDataFromDB(props);
             });
+            // 2. rename user to specific ID (user_ID)
           });
         } else {
           await this.getDataFromDB(props);
         }
       });
     } else {
-      await this.getDataFromLS();
+      await this.getDataFromLS(props);
     }
   };
   getDataFromDB = async (props) => {
@@ -98,13 +97,14 @@ class initApplication {
     const favorite_shops = get_data.data('favorite-shops').then(value => value !== undefined && props.handleFavoriteShops(value.result));
     const categories = get_data.data('categories').then(value => value !== undefined && props.handleCategories(value));
     const userRequests = get_data.data('userRequests').then(value => value !== undefined && props.handleRequests(value));
+    const answers = get_data.data('answers').then(value => value !== undefined && props.handleAnswers(value));
     const cars = get_data.data('cars').then(value => value !== undefined && props.handleCars(value));
     const carBrands = get_data.data('carbrands').then(value => value !== undefined && props.handleCarBrands(value));
     const carModels = get_data.data('carmodels').then(value => value !== undefined && props.handleCarModels(value));
     const requestStatuses = get_data.data('request-statuses').then(value => value !== undefined && props.handleStatuses(value));
 
     // wait all requests
-    await Promise.all([shops, favorite_shops, categories, userRequests, cars, carBrands, carModels, requestStatuses]).then(() => {
+    await Promise.all([shops,favorite_shops,categories,answers,userRequests,cars,carBrands,carModels,requestStatuses]).then(() => {
       console.log('loaded from DB');
     });
   };
@@ -112,6 +112,7 @@ class initApplication {
     const shops = get('shops').then(value => value !== undefined && props.handleShops(value));
     const favorite_shops = get('favorite-shops').then(value => value !== undefined && props.handleFavoriteShops(value.result));
     const categories = get('categories').then(value => value !== undefined && props.handleCategories(value));
+    const answers = get('answers').then(value => value !== undefined && props.handleAnswers(value));
     const userRequests = get('userRequests').then(value => value !== undefined && props.handleRequests(value));
     const cars = get('cars').then(value => value !== undefined && props.handleCars(value));
     const carBrands = get('carbrands').then(value => value !== undefined && props.handleCarBrands(value));
@@ -119,7 +120,7 @@ class initApplication {
     const requestStatuses = get('request-statuses').then(value => value !== undefined && props.handleStatuses(value));
 
     // wait all requests
-    await Promise.all([shops, favorite_shops, categories, userRequests, cars, carBrands, carModels, requestStatuses]).then(() => {
+    await Promise.all([shops,favorite_shops,categories,answers,userRequests,cars,carBrands,carModels,requestStatuses]).then(() => {
       console.log('loaded from LS');
     });
   }
@@ -144,7 +145,7 @@ class HomePage extends React.Component {
     get('current_tab').then(current_tab => {
       current_tab !== undefined
       && this.setState({current_tab})
-      && this.$f7.tab.show(`#${current_tab}`, `#${current_tab}`);
+      && this.$f7.tab.show(`#${current_tab}`,`#${current_tab}`);
     });
     get('stepsEnabled').then(value => {
       const stepsEnabled = value === undefined;
@@ -168,13 +169,13 @@ class HomePage extends React.Component {
   chgTitle = (title, tab) => {
     this.setState({title: title});
     set('current_tab', tab).then(() => {
-      this.$f7.tab.show(`#${tab}`, `#${tab}`, true);
+      this.$f7.tab.show(`#${tab}`,`#${tab}`, true);
     });
   };
 
 
   render() {
-    const {loaded, title, current_tab, stepsEnabled} = this.state;
+    const { loaded, title, current_tab, stepsEnabled } = this.state;
     const steps = [
       {
         element: '.toolbar.tabbar',
@@ -209,7 +210,7 @@ class HomePage extends React.Component {
         >
           <NavRight>
             <Offline>
-              <Link iconIos="material:signal_wifi_off"/>
+              <Link iconIos="material:signal_wifi_off" />
             </Offline>
           </NavRight>
         </Navbar>
@@ -221,25 +222,25 @@ class HomePage extends React.Component {
         >
           <Link
             tabLink="#requests"
-            onClick={() => this.chgTitle('Мои заказы', 'requests')}
+            onClick={() => this.chgTitle('Мои заказы','requests')}
             tabLinkActive={current_tab === 'requests'}
             text="Мои заказы"
             iconIos="material:important_devices"
           />
           <Link tabLink="#stores"
-                onClick={() => this.chgTitle('Магазины', 'stores')}
+                onClick={() => this.chgTitle('Магазины','stores')}
                 tabLinkActive={current_tab === 'stores'}
                 text="Магазины" iconIos="material:store"/>
           <Link tabLink="#new" onClick={() => this.new_request(0)}
-                text=" ">
+                text=" " >
             <Icon material="add"/>
           </Link>
           <Link tabLink="#favorites"
-                onClick={() => this.chgTitle('Избранное', 'favorites')}
+                onClick={() => this.chgTitle('Избранное','favorites')}
                 tabLinkActive={current_tab === 'favorites'}
                 text="Избранное" iconIos="material:favorite"/>
           <Link tabLink="#person"
-                onClick={() => this.chgTitle('Личный Кабинет', 'person')}
+                onClick={() => this.chgTitle('Личный Кабинет','person')}
                 tabLinkActive={current_tab === 'person'}
                 text="Кабинет" iconIos="material:person"/>
         </Toolbar>
@@ -256,7 +257,7 @@ class HomePage extends React.Component {
 
         <Tabs animated={loaded}>
           <Tab id="requests" className="page-content" tabActive={current_tab === 'requests'}>
-            <RequestsPage/>
+            <RequestsPage f7={this.$f7} {...this.props}/>
           </Tab>
           <Tab id="stores" className="page-content" tabActive={current_tab === 'stores'}>
             <StoresPage/>
@@ -290,6 +291,7 @@ const mapDispatchToProps = dispatch => {
     handleCarBrands: brands => dispatch(handleCarBrands(brands)),
     handleCarModels: models => dispatch(handleCarModels(models)),
     handleStatuses: statuses => dispatch(handleStatuses(statuses)),
+    handleAnswers: statuses => dispatch(handleAnswers(statuses)),
   }
 };
 

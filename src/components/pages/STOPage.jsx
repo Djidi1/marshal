@@ -37,7 +37,7 @@ class STOPage extends React.Component {
                                     <Icon className={"status-icon"} material="build" color="purple"/> {item.name}
                                 </span>
                                 <SwipeoutActions left>
-                                    <SwipeoutButton color="blue" onClick={this.forward.bind(this)}>
+                                    <SwipeoutButton close color="blue" onClick={this.forward.bind(this)}>
                                         <Icon material="favorite"/> В избранное
                                     </SwipeoutButton>
                                 </SwipeoutActions>

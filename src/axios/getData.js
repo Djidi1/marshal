@@ -6,15 +6,17 @@ export class getData {
         const url = '/' + type;
         const payload = {};
         try {
-            let res = await axios.get(url, payload);
+            let res =  await axios.get(url, payload);
             if (res.status === 200) {
                 set(type, res.data).then();
                 return res.data;
             }
-            return false;
+            return undefined;
         } catch (error) {
-            console.log(error.response);
-            return error.response.status;
+            if (error.response.status === 401) {
+                return 401
+            }
+            return undefined;
         }
     };
 }

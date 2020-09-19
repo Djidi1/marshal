@@ -1,11 +1,6 @@
 import React, {Component} from 'react';
-import Picker from 'react-mobile-picker';
 import {
-    PageContent,
-    Sheet,
-    Toolbar,
-    Link,
-    Chip,
+    ListInput
 } from 'framework7-react';
 
 
@@ -13,17 +8,26 @@ export default class StoreSelect extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isPickerShow: false,
             valueGroups: {
                 type: 'Товар',
-                carBrand: '',
-                category: ''
+                carBrand: 'Все',
+                category: 'Все'
             },
             optionGroups: {
                 type: ['Товар', 'Ремонт/Услуга'],
-                carBrand: [''],
-                category: ['']
-            }
+                carBrand: ['Все'],
+                category: ['Все']
+            },
+            colorsGroups: {
+                type: 'orange',
+                carBrand: 'teal',
+                category: 'blue'
+            },
+            labelsGroups: {
+                type: 'Магазин/СТО',
+                carBrand: 'Марка авто',
+                category: 'Категория'
+            },
         };
     }
 
@@ -39,11 +43,6 @@ export default class StoreSelect extends Component {
                         carBrand: names_only_brands,
                         category: names_only_categories,
                     },
-                    valueGroups: {
-                        ...valueGroups,
-                        carBrand: names_only_brands[0],
-                        category: names_only_categories[0],
-                    }
                 }))
             }
         }
@@ -57,61 +56,56 @@ export default class StoreSelect extends Component {
                     ...valueGroups,
                     [name]: value
                 }
-            }));
-            if (name === 'carBrand') {
-                const item = carbrands.find(x => x.car_brand === value);
-                if (item) {
-                    handleBrand(item.id);
+            }), () => {
+                if (name === 'carBrand') {
+                    const item = carbrands.find(x => x.car_brand === value);
+                    if (item || Number(value) === 0) {
+                        handleBrand(Number(value) === 0 ? 0 : item.id);
+                    }
                 }
-            }
-            if (name === 'category') {
-                const item = categories.find(x => x.category === value);
-                if (item) {
-                    handleCategory(item.id);
+                if (name === 'category') {
+                    const item = categories.find(x => x.category === value);
+                    if (item || Number(value) === 0) {
+                        handleCategory(Number(value) === 0 ? 0 : item.id);
+                    }
                 }
-            }
+            });
         }
     };
 
-    togglePicker = () => {
-        this.setState(({isPickerShow}) => ({
-            isPickerShow: !isPickerShow
-        }));
-    };
-
     render() {
-        const {isPickerShow, optionGroups, valueGroups} = this.state;
+        const {optionGroups, valueGroups, colorsGroups, labelsGroups} = this.state;
 
         return (
             <>
                 <span className="filter-title">Фильтр по магазинам</span>
-                <div className="display-flex padding-horizontal-half" onClick={this.togglePicker}>
-                    <Chip className="flex-direction-column" text={valueGroups.type} color="orange" />
-                    <Chip className="flex-direction-column" text={valueGroups.carBrand} color="teal" />
-                    <Chip className="flex-direction-column" text={valueGroups.category} color="blue" />
+                <div className="display-flex padding-horizontal-half">
+                    {Object.keys(optionGroups).map((type) => {
+                        const group = optionGroups[type];
+                        return (
+                            <ListInput
+                                key={`group_${type}`}
+                                className={`chip flex-direction-column color-${colorsGroups[type]}`}
+                                type="select"
+                                label={labelsGroups[type]}
+                                placeholder="Выберите..."
+                                value={valueGroups[type]}
+                                onChange={(event) => this.handleChange(type, event.target.value)}
+                            >
+                                { type !== 'type' && <option key={0} value={0}>Все</option> }
+                                {
+                                    group.map((item, index) => (
+                                        <option
+                                            key={`select_${type}_${index}`}
+                                            value={item}
+                                        >{item}</option>
+                                    ))
+                                }
+                            </ListInput>
+                        )
+                    })
+                    }
                 </div>
-                <Sheet className="demo-sheet" opened={isPickerShow} onSheetClosed={() => {this.setState({isPickerShow: false})}}>
-                    <Toolbar>
-                        <div className="left">
-                            <span className="padding">Фильтр по магазинам</span>
-                        </div>
-                        <div className="right">
-                            <Link onClick={this.togglePicker} sheetClose>OK</Link>
-                        </div>
-                    </Toolbar>
-                    <PageContent>
-                        <div className="display-flex padding-horizontal-half">
-                            <span className="flex-direction-column">Тип</span>
-                            <span className="flex-direction-column">Марка</span>
-                            <span className="flex-direction-column">Категория</span>
-                        </div>
-                        <Picker
-                            optionGroups={optionGroups}
-                            valueGroups={valueGroups}
-                            onChange={this.handleChange} />
-                    </PageContent>
-                </Sheet>
-
             </>
         );
     }

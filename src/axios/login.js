@@ -3,6 +3,7 @@ import { axios } from './init'
 
 
 export class authorisation {
+
     login = async (...args) => {
         const url = '/login';
         const payload = {

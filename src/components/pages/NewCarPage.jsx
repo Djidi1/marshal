@@ -101,7 +101,6 @@ class NewCarPage extends Component {
 
     if (car_id > 0) {
       const car = this.props.cars.find(car => car.id === car_id);
-
       // Set data to local state
       initData.car_id = car.id;
       initData.car_brand_id = car.car_brand_id;
