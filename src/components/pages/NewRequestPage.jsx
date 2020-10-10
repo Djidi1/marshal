@@ -181,16 +181,18 @@ class NewRequestPage extends Component {
                         value={text}
                         onChange={(event) => this.handleData('text', event.target.value)}
                     />
-
-                    <BlockTitle>Заявка в магазин:
-                        { selectedShops.map((item, index) => <b key={index}> {item.name}</b>) }
+                    <Block>
                         <Button
                             small
                             fill
                             onClick={() => this.set_stores()}
                             style={{float: 'right', display: 'inline-block'}}
-                        >{selectedShops.length ? 'Изменить' : 'Выбрать'}</Button>
-                    </BlockTitle>
+                        >{selectedShops.length ? 'Другой магазинн' : 'Выбрать'}</Button>
+                        <p>
+                            Заявка в магазин: {selectedShops.length ? '' : 'Любой'}
+                            { selectedShops.map((item, index) => <b key={index}> {item.name}</b>) }
+                        </p>
+                    </Block>
                 </List>
                 <Block>
                     <Button

@@ -9,7 +9,7 @@ import {
     Block,
     ListItem,
     Link,
-    NavRight
+    NavRight, Button
 } from 'framework7-react';
 
 class ShopsList extends React.Component {
@@ -35,6 +35,8 @@ class ShopsList extends React.Component {
     renderExternal(vl, vlData) {
         this.setState({ vlData });
     }
+
+    handleReset = () => {this.setState({selectedShops: []});}
 
     handleToggle = (item) => {
         this.setState({selectedShops: [item.id]});
@@ -88,6 +90,12 @@ class ShopsList extends React.Component {
                     </Subnavbar>
                 </Navbar>
                 <Block>
+                    <Button
+                      small
+                      fill
+                      onClick={this.handleReset}
+                      style={{float: 'right', display: 'inline-block'}}
+                    >Сбросить</Button>
                     <p>Здесь вы можете выбрать в какой магазин хотите отправить запрос</p>
                 </Block>
                 <List className="searchbar-not-found">

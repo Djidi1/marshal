@@ -306,7 +306,8 @@ class respMessages extends React.Component {
     }
 
     static getDerivedStateFromProps(nextProps, prevState){
-        if (!(_.isEqual(nextProps.response.messages, prevState.messages))) {
+        if (nextProps.response.messages > 0
+            && !(_.isEqual(nextProps.response.messages, prevState.messages))) {
             return {response : nextProps.response};
         }
         else return null;

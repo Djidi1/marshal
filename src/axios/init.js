@@ -1,7 +1,7 @@
 import { get } from 'idb-keyval';
 export const axios = require('axios');
 
-axios.defaults.baseURL = 'https://marshal.bh-app.ru/api';
+axios.defaults.baseURL = 'https://marshal24.ru/api';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 get('AUTH_TOKEN').then(AUTH_TOKEN => {
